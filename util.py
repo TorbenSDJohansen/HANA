@@ -27,6 +27,7 @@ MISSING_INDICATOR = 29
 MAX_INDIVIDUAL_NAME_LEN = 18
 MAX_NB_FIRST_NAMES = 9
 MAX_NB_LAST_NAMES = 1
+MAX_NB_MIDDLE_NAMES = MAX_NB_FIRST_NAMES - 1
 
 def transform_label_individual_name(raw_input: dict or str) -> np.ndarray:
     '''
