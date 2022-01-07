@@ -149,12 +149,15 @@ def match(names: np.ndarray, lookup: dict):
 def parse_args():
     parser = argparse.ArgumentParser(description='Matching')
 
-    parser.add_argument('--root', type=str)
     parser.add_argument('--datadir', type=str)
+    parser.add_argument('--root', type=str, default=None)
     parser.add_argument('--fn-results', type=str, default=None)
     parser.add_argument('--fn-preds', type=str, default=None)
 
     args = parser.parse_args()
+
+    if args.root is None:
+        assert args.fn_results is not None and args.fn_preds is not None
 
     return args
 
