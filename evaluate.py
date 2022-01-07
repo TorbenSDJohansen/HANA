@@ -73,13 +73,17 @@ def evaluate(
     print('Initializing model(s).')
     models = load_models(model_info, root, device)
 
-    print('Initializing generator and dataset.')
+    print('Initializing generator.')
+    labels_raw = prepare_labels(
+        cells=data_info['cells'],
+        root_labels=data_info['root_labels'],
+        root_images=data_info['root_images'],
+        )
+    if 'debug' in data_info.keys():
+        labels_raw = labels_raw[:data_info['debug']]
+
     generator = SequenceDataset(
-        labels_raw=prepare_labels(
-            cells=data_info['cells'],
-            root_labels=data_info['root_labels'],
-            root_images=data_info['root_images'],
-            ),
+        labels_raw=labels_raw,
         transform_to_label=data_info['transform_label'],
         val_size=1.0,
         transform_pipe=get_pipe(),
@@ -132,6 +136,7 @@ def parse_args():
     parser.add_argument('--fn-results', type=str, default=None)
     parser.add_argument('--fn-preds', type=str, default=None)
     parser.add_argument('--batch-size', type=int, default=1024)
+    parser.add_argument('--debug', type=int, default=None, help='Keep only specified number of obs. for debugging.')
 
     args = parser.parse_args()
 
@@ -160,6 +165,10 @@ def main():
     data_info['root_images'] = data_info['root_images'].format(args.datadir)
 
     data_info['batch_size'] = args.batch_size
+
+    if args.debug is not None:
+        print(f'Debug mode using {args.debug} number of observations.')
+        data_info['debug'] = args.debug
 
     # Want to study test performance.
     data_info['cells'] = [(data_info['cells'][0][0].replace('train', 'test'), data_info['cells'][0][1])]
