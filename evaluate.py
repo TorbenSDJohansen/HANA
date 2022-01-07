@@ -23,8 +23,20 @@ from networks.util.pytorch_functions import (
 from networks.util.pytorch_datasets import SequenceDataset
 
 from util import get_pipe
-from matching import MatchToStr
 from settings import SETTINGS
+
+
+def dict_to_str(clean: np.ndarray):
+    if isinstance(clean[0], str):
+        return clean
+
+    assert isinstance(clean[0], dict)
+
+    # FIXME Consider if important to distinguish between first and last names,
+    # as might be important if empty. I.e. firstname + empty lastname is
+    # different from empty firstname + lastname, but not possible when using
+    # code below...
+    return np.array([' '.join((x['firstnames'], x['lastnames'])) for x in clean])
 
 
 def evaluate(
@@ -36,7 +48,8 @@ def evaluate(
         fn_preds: str = None,
         ):
     """
-    Perform evaluation by calculating accuracy on the validation data.
+    Perform evaluation by calculating accuracy on the validation data. Also
+    produces predictions on the validation data.
 
     Parameters
     ----------
@@ -92,34 +105,26 @@ def evaluate(
     preds_clean = np.array(list(map(data_info['clean_pred'], preds)))
     labels_clean = np.array(list(map(data_info['clean_pred'], labels.astype(int))))
 
-    # match_name = MatchToStr(set(LAST_NAMES[:, 0]))
-    # preds_matched, _, nb_fuzzy, _ = match_name.match(preds_clean)
+    preds_clean = dict_to_str(preds_clean)
+    labels_clean = dict_to_str(labels_clean)
 
     acc, _, _ = eval_sequence(labels_clean, preds_clean, seq_prob)
-    # acc_matching, _, _ = eval_sequence(labels_clean, preds_matched, seq_prob)
 
-    if fn_results is not None:
-        results = {
-            'Models used': list(models.keys()),
-            'Number of observations for testing': len(generator),
-            'Accuracy': acc,
-            # 'Accuracy (with matching)': acc_matching,
-            # 'Number of observations matched': nb_fuzzy,
-            }
-        pickle.dump(results, open(fn_results, 'wb'))
-    else:
-        print(f'Accuracy: {round(acc * 100, 2)}%.')
+    results = {
+        'Models used': list(models.keys()),
+        'Number of observations for testing': len(generator),
+        'Accuracy': acc,
+        }
+    pickle.dump(results, open(fn_results, 'wb'))
 
     pred_df = pd.DataFrame({
         'filename_full': files,
         'label': labels_clean,
         'pred': preds_clean,
-        # 'pred_matched': preds_matched,
         'prob': seq_prob,
         })
 
-    if fn_preds is not None:
-        pred_df.to_csv(fn_preds, index=False)
+    pred_df.to_csv(fn_preds, index=False)
 
 
 def parse_args():
@@ -127,8 +132,10 @@ def parse_args():
 
     parser.add_argument('--settings', type=str, choices=SETTINGS.keys())
     parser.add_argument('--root', type=str)
+    parser.add_argument('--datadir', type=str)
     parser.add_argument('--fn_results', type=str, default=None)
     parser.add_argument('--fn_preds', type=str, default=None)
+    parser.add_argument('--batch-size', type=int, default=1024)
 
     args = parser.parse_args()
 
@@ -153,10 +160,13 @@ def main():
     data_info = SETTINGS[settings]['data_info']
     model_info = SETTINGS[settings]['model_info']
 
-    # Want to study test performance. Also larger batch size.
+    data_info['root_labels'] = data_info['root_labels'].format(args.datadir)
+    data_info['root_images'] = data_info['root_images'].format(args.datadir)
+
+    data_info['batch_size'] = args.batch_size
+
+    # Want to study test performance.
     data_info['cells'] = [(data_info['cells'][0][0].replace('train', 'test'), data_info['cells'][0][1])]
-    data_info['cells'] = [(data_info['cells'][0][0] + '_intersect', data_info['cells'][0][1])]
-    data_info['batch_size'] = 1024
 
     evaluate(data_info, model_info, device, root, fn_results, fn_preds)
 

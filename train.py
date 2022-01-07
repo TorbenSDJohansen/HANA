@@ -101,6 +101,8 @@ def parse_args():
 
     parser.add_argument('--settings', type=str, choices=SETTINGS.keys())
     parser.add_argument('--root', type=str)
+    parser.add_argument('--datadir', type=str)
+    parser.add_argument('--batch-size', type=int, default=1024)
 
     args = parser.parse_args()
 
@@ -117,6 +119,11 @@ def main():
 
     data_info = SETTINGS[settings]['data_info']
     model_info = SETTINGS[settings]['model_info']
+
+    data_info['root_labels'] = data_info['root_labels'].format(args.datadir)
+    data_info['root_images'] = data_info['root_images'].format(args.datadir)
+
+    data_info['batch_size'] = args.batch_size
 
     train(data_info, model_info, device, root)
 
