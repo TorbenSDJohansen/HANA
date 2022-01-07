@@ -19,11 +19,9 @@ from util import (
 
 
 DATA_DEFAULT_INFO = {
-    'cells': [
-        ('register_full_names_revised_dictionary_train_person1', 'register_names_revised'), # FIXME
-        ],
-    'root_labels': 'Z:/data_cropouts/Labels/HANA/', # FIXME
-    'root_images': 'Z:/data_cropouts/PolitietsRegisterblade/', # FIXME
+    'cells': [['HANA_train', 'HANA']],
+    'root_labels': '{}/',
+    'root_images': '{}/',
     'batch_size': 256,
     'nb_epochs': 100,
     }
