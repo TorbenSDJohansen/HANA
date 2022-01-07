@@ -1,15 +1,21 @@
 # -*- coding: utf-8 -*-
 """
 @author: sa-tsdj
-
-Helper functions to prepare and present results.
-
 """
 
+
+import os
 import time
 import difflib
+import argparse
+import pickle
+import re
 
+import pandas as pd
 import numpy as np
+
+from util import MAX_INDIVIDUAL_NAME_LEN, MAX_NB_MIDDLE_NAMES
+
 
 class MatchToStr():
     """
@@ -87,3 +93,105 @@ class MatchToStr():
         strs_matched = np.array(strs_matched)
 
         return strs_matched, nb_exact, nb_fuzzy, self.fuzzy_map
+
+
+def split_names(names: np.ndarray):
+    split = np.char.split(names)
+    last_names = np.array([x[-1] for x in split]).reshape((len(names), 1))
+    remaining = [x[:-1] for x in split]
+    first_names = np.array([x[0] if len(x) > 0 else '' for x in remaining]).reshape((len(names), 1))
+    middle_names = np.empty((len(split), MAX_NB_MIDDLE_NAMES), dtype=f'U{MAX_INDIVIDUAL_NAME_LEN}')
+
+    for i, names in enumerate([x[1:] for x in remaining]):
+        for j, name in enumerate(names):
+            middle_names[i, j] = name
+
+    names = np.concatenate([first_names, middle_names, last_names], axis=1)
+
+    return names
+
+
+def match(names: np.ndarray, lookup: dict):
+    nb_cols = names.shape[1]
+    names_matched = names.copy()
+
+    middle_name_matcher = MatchToStr(lookup['middle'].union(set(['']))) # for re-use
+    mapper = {
+        0: MatchToStr(lookup['first'].union(set(['']))),
+        **{i: middle_name_matcher for i in range(1, nb_cols - 1)},
+        (nb_cols - 1): MatchToStr(lookup['last']),
+        }
+    nb_fuzzy = {}
+
+    for i, matcher in mapper.items():
+        print(f'Matching column {i + 1} of {nb_cols}.')
+        matched, _, nb_fuzzy_i, _ = matcher.match(names[:, i])
+        names_matched[:, i] = matched
+        nb_fuzzy[i] = nb_fuzzy_i
+
+    nb_matches = {
+        'Number of first names matched': nb_fuzzy[0],
+        'Number of middle names matched': sum(nb_fuzzy[i] for i in range(1, nb_cols - 1)),
+        'Number of last names matched': nb_fuzzy[nb_cols - 1],
+        }
+
+    names_matched = pd.DataFrame(names_matched)
+    names_matched_flat = names_matched[0]
+
+    for i in range(1, nb_cols):
+        names_matched_flat += ' ' + names_matched[i]
+
+    names_matched_flat = names_matched_flat.apply(lambda x: re.sub(' +', ' ', x).strip())
+
+    return names_matched_flat.values, nb_matches
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(description='Matching')
+
+    parser.add_argument('--root', type=str)
+    parser.add_argument('--datadir', type=str)
+    parser.add_argument('--fn-results', type=str, default=None)
+    parser.add_argument('--fn-preds', type=str, default=None)
+
+    args = parser.parse_args()
+
+    return args
+
+
+def main():
+    args = parse_args()
+
+    fn_results = args.fn_results
+    fn_preds = args.fn_preds
+
+    if fn_results is None:
+        fn_results = os.path.join(args.root, 'eval_results.pkl')
+    if fn_preds is None:
+        fn_preds = os.path.join(args.root, 'preds.csv')
+
+    preds = pd.read_csv(fn_preds)
+    results = pickle.load(open(fn_results, 'rb'))
+
+    lookup_str = os.path.join(args.datadir, '{}_names.npy')
+    lookup = {
+        'first': set(np.load(lookup_str.format('first'), allow_pickle=True)),
+        'middle': set(np.load(lookup_str.format('middle'), allow_pickle=True)),
+        'last': set(np.load(lookup_str.format('last'), allow_pickle=True)),
+        }
+
+    split_preds = split_names(preds['pred'].values.astype('U'))
+    matched, nb_matches = match(split_preds, lookup)
+
+    preds['pred_m'] = matched
+    acc = (preds['pred_m'] == preds['label']).mean()
+
+    results.update(nb_matches)
+    results['Accuracy (with matching)'] = acc
+
+    pickle.dump(results, open(fn_results.replace('.pkl', '_matched.pkl'), 'wb'))
+    preds.to_csv(fn_preds.replace('.csv', '_matched.csv'), index=False)
+
+
+if __name__ == '__main__':
+    main()
