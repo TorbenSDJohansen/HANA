@@ -19,7 +19,7 @@ from util import (
 
 
 DATA_DEFAULT_INFO = {
-    'cells': [['HANA_train', 'HANA']],
+    'cells': [('HANA_train', 'HANA')],
     'root_labels': '{}/',
     'root_images': '{}/',
     'batch_size': 256,
