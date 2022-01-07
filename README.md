@@ -88,3 +88,4 @@ To use a different level of recall, you can specify it using the command `--reca
 - [ ] Transfer learning
 - [ ] Explaining settings.py
 - [ ] Is recall the right word to use? In paper and in code
+- [ ] Link to paper
