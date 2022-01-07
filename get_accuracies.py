@@ -52,7 +52,7 @@ def _get_acc(data, recall, predcol):
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='Get sequence and word accuracy')
+    parser = argparse.ArgumentParser(description='Get word accuracies')
 
     parser.add_argument('--fn-preds', type=str)
 
