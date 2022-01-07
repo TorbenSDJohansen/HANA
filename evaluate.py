@@ -129,8 +129,8 @@ def parse_args():
     parser.add_argument('--settings', type=str, choices=SETTINGS.keys())
     parser.add_argument('--root', type=str)
     parser.add_argument('--datadir', type=str)
-    parser.add_argument('--fn_results', type=str, default=None)
-    parser.add_argument('--fn_preds', type=str, default=None)
+    parser.add_argument('--fn-results', type=str, default=None)
+    parser.add_argument('--fn-preds', type=str, default=None)
     parser.add_argument('--batch-size', type=int, default=1024)
 
     args = parser.parse_args()
