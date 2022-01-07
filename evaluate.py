@@ -32,10 +32,6 @@ def dict_to_str(clean: np.ndarray):
 
     assert isinstance(clean[0], dict)
 
-    # FIXME Consider if important to distinguish between first and last names,
-    # as might be important if empty. I.e. firstname + empty lastname is
-    # different from empty firstname + lastname, but not possible when using
-    # code below...
     return np.array([' '.join((x['firstnames'], x['lastnames'])) for x in clean])
 
 
