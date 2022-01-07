@@ -48,7 +48,7 @@ def get_word_acc(data, recall, predcol):
 
     acc = is_correct / counter
 
-    print(f'Recall: {round(100 * realized_recall, 2)}%. Accuracy: {round(100 * acc, 2)}%.')
+    print(f'Recall: {round(100 * realized_recall, 2)}%. Word accuracy: {round(100 * acc, 2)}%.')
 
 
 def parse_args():
