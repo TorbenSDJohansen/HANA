@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 
 
-def _get_acc(data, recall, predcol):
+def get_word_acc(data, recall, predcol):
     threshold = np.quantile(data['prob'], 1 - recall)
     sub = data[data['prob'] >= threshold]
 
@@ -55,8 +55,16 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Get word accuracies')
 
     parser.add_argument('--fn-preds', type=str)
+    parser.add_argument('--recall', type=float, default=None)
 
     args = parser.parse_args()
+
+    if args.recall is None:
+        args.recall = 0.9
+    else:
+        if 1 < args.recall < 100:
+            args.recall /= 100
+        assert 0 < args.recall < 1, args.recall
 
     return args
 
@@ -66,13 +74,13 @@ def main():
 
     preds = pd.read_csv(args.fn_preds)
 
-    _get_acc(preds, 1, 'pred')
-    _get_acc(preds, 0.9, 'pred')
+    get_word_acc(preds, 1, 'pred')
+    get_word_acc(preds, args.recall, 'pred')
 
     if 'pred_m' in preds.columns:
         print('\nUsing matched predictions:')
-        _get_acc(preds, 1, 'pred_m')
-        _get_acc(preds, 0.9, 'pred_m')
+        get_word_acc(preds, 1, 'pred_m')
+        get_word_acc(preds, args.recall, 'pred_m')
 
 
 if __name__ == '__main__':
