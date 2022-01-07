@@ -49,12 +49,16 @@ def train(
 
     """
     print('Initializing generator.')
+    labels_raw = prepare_labels(
+        cells=data_info['cells'],
+        root_labels=data_info['root_labels'],
+        root_images=data_info['root_images'],
+        )
+    if 'debug' in data_info.keys():
+        labels_raw = labels_raw[:data_info['debug']]
+
     generator = SequenceDataset(
-        labels_raw=prepare_labels(
-            cells=data_info['cells'],
-            root_labels=data_info['root_labels'],
-            root_images=data_info['root_images'],
-            ),
+        labels_raw=labels_raw,
         transform_to_label=data_info['transform_label'],
         val_size=0.05,
         transform_pipe=get_pipe(),
@@ -87,8 +91,8 @@ def train(
         eval_loss=sequence_loss_eval,
         acc_function=sequence_acc,
         epochs=data_info['nb_epochs'],
-        save_interval=25_000,
-        log_interval=10_000,
+        save_interval=min(10 * len(ds_train), 10_000),
+        log_interval=min(len(ds_train), 1_000),
         root=root,
         device=device,
         )
@@ -103,6 +107,7 @@ def parse_args():
     parser.add_argument('--root', type=str)
     parser.add_argument('--datadir', type=str)
     parser.add_argument('--batch-size', type=int, default=None)
+    parser.add_argument('--debug', type=int, default=None, help='Keep only specified number of obs. for debugging.')
 
     args = parser.parse_args()
 
@@ -124,6 +129,10 @@ def main():
     data_info['root_images'] = data_info['root_images'].format(args.datadir)
 
     data_info['batch_size'] = args.batch_size or data_info['batch_size']
+
+    if args.debug is not None:
+        print(f'Debug mode using {args.debug} number of observations.')
+        data_info['debug'] = args.debug
 
     train(data_info, model_info, device, root)
 
