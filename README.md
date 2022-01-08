@@ -14,7 +14,19 @@ Note the following abbreviations used below:
 1. `DATADIR`: This is the directory where you store the HANA database.
 2. `ROOT`: This is the directory where you save a model and its output. Each neural network has its own `ROOT`.
 
-### Clone And Prepare Environment
+### Clone Repository and Prepare Environment
+
+To get started, first clone the repository locally:
+```
+git clone https://github.com/TorbenSDJohansen/HANA.git
+```
+
+Then prepare an environment (here using conda and naming the envionment HANA):
+```
+conda create -n HANA numpy pandas pillow scikit-learn tensorboard
+conda activate HANA
+conda install pytorch=1.9 torchvision=0.10 torchaudio cudatoolkit=10.2 -c pytorch
+```
 
 ### Train Neural Networks
 
@@ -100,8 +112,8 @@ To use a different level of recall, you can specify it using the command `--reca
 ## TODO
 
 - [ ] How to download database
-- [ ] How to prepare environment, including which packages are needed
-- [ ] Explain Resuming training
+- [x] How to prepare environment, including which packages are needed
+- [ ] Explain Resuming training. Maybe use line 242 in networks/expriment.py to change self.epoch before main loop: self.epochs -= epochs
 - [ ] Transfer learning
 - [ ] Explaining settings.py
 - [ ] Is recall the right word to use? In paper and in code
