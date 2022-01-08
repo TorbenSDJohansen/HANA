@@ -4,6 +4,7 @@ Code related to the paper HANA: A HAndwritten NAme Database for Offline Handwrit
 - [Download Database](#download-database)
 - [Replicate Results](#replicate-results)
 - [TODO](#todo)
+- [Citing](#citing)
 
 ## Download Database
 
@@ -120,3 +121,16 @@ To use a different level of recall, you can specify it using the command `--reca
 - [ ] Link to paper
 - [ ] Use Torch Hub?
 - [ ] debug mode
+
+## Citing
+
+### BibTeX
+
+```bibtex
+@article{tsdj2022hana,
+  author = {XXX},
+  title = {XXX},
+  year = {XXX},
+  journal = {XXX},
+}
+```
