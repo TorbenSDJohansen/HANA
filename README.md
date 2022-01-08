@@ -1,26 +1,30 @@
 # HANA
 Code related to the paper HANA: A HAndwritten NAme Database for Offline Handwritten Text Recognition.
 
-To replicate our results, follow the steps in the sections below.
-Note the following abbreviations used in the code chunks below:
-1. `DATADIR`: This is the directory where you store the data. This never changes.
-2. `ROOT`: This is the directory where you save a model and its output. This changes between models.
+- [Download Database](#download-database)
+- [Clone And Prepare Environment](#clone-and-prepare-environment)
+- [Replicate Results](#replicate-results)
+- [TODO](#todo)
 
 ## Download Database
 
-Include also pretrained models here!
+## Clone And Prepare Environment
 
-## (Maybe) Clone And Prepare Environment
+## Replicate Results
 
-## Train Neural Networks
+To replicate our results, follow the steps in the sections below.
+Note the following abbreviations used below:
+1. `DATADIR`: This is the directory where you store the HANA database.
+2. `ROOT`: This is the directory where you save a model and its output. Each neural network has its own `ROOT`.
 
-**Consider if moving below evaluate**
+### Train Neural Networks
 
 To train the neural network transcribing only last names, use the command below:
 ```
 python train.py --settings ln --root ROOT --datadir DATADIR
 ```
 This will train a neural network in `ROOT/logs/resnet50-multi-branch/` and log to tensorboard.
+Five percent of the training data will be used for the purpose of logging validation performance.
 To follow training using tensorboard, use the command `tensorboard --port 1234 --logdir ROOT` and visit `localhost:1234`.
 
 To train the network transcribing first and last names:
@@ -33,7 +37,7 @@ To train the network transcribing first, middle, and last names:
 python train.py --settings fln --root ROOT --datadir DATADIR
 ```
 
-## Predict/Evaluate 
+### Predict/Evaluate
 
 To evaluate a trained model on the test set, and obtain predictions on all samples in the test set, first make sure to have a trained model in `ROOT`.
 Then use the command below for the network transcribing only last names:
@@ -54,7 +58,17 @@ For the network transcribing first, middle, and last names:
 python evaluate.py --settings fln --root ROOT --datadir DATADIR
 ```
 
-## Perform Matching
+#### Without Training A Model
+If you have not trained a model yourself, you can use those provided when you downloaded the database.
+This way you can exactly replicate the numbers from the paper.
+The pretrained models are located in `DATADIR/pretrained` and are:
+1. `fln`: The network transcribing first and last names.
+2. `fn`: The network transcribing first, middle, and last names.
+3. `ln`: The network transcribing last names.
+
+To use, e.g., the model `ln`, you can either copy/paste the folder `DATADIR/pretrained/ln` and use that location as `ROOT` or you can specify `ROOT` as `DATADIR/pretrained/ln`.
+
+### Perform Matching
 
 To perform matching, first make sure to have a file with predictions.
 Then use the command below:
@@ -70,7 +84,7 @@ In that case, you do not need to provide an argument for `--root`.
 
 Note that the dictionaries used to perform matching are in `DATADIR`, which is why it must be specified as an argument.
 
-## Calculate Word Accuracies
+### Calculate Word Accuracies
 
 To obtain word acccuracy rates and accuracy rates at a specified level of recall, first make sure to have a file with predictions.
 Suppose this file was called `path/to/preds.csv`.
@@ -82,10 +96,13 @@ This will print the overall word accuracy and the accuracy at 90% recall.
 
 To use a different level of recall, you can specify it using the command `--recall`.
 
-# TODO
+## TODO
 
+- [ ] How to download database
+- [ ] How to prepare environment, including which packages are needed
 - [ ] Explain Resuming training
 - [ ] Transfer learning
 - [ ] Explaining settings.py
 - [ ] Is recall the right word to use? In paper and in code
 - [ ] Link to paper
+- [ ] Use Torch Hub?
