@@ -2,13 +2,10 @@
 Code related to the paper HANA: A HAndwritten NAme Database for Offline Handwritten Text Recognition.
 
 - [Download Database](#download-database)
-- [Clone And Prepare Environment](#clone-and-prepare-environment)
 - [Replicate Results](#replicate-results)
 - [TODO](#todo)
 
 ## Download Database
-
-## Clone And Prepare Environment
 
 ## Replicate Results
 
@@ -16,6 +13,8 @@ To replicate our results, follow the steps in the sections below.
 Note the following abbreviations used below:
 1. `DATADIR`: This is the directory where you store the HANA database.
 2. `ROOT`: This is the directory where you save a model and its output. Each neural network has its own `ROOT`.
+
+### Clone And Prepare Environment
 
 ### Train Neural Networks
 
@@ -66,7 +65,7 @@ The pretrained models are located in `DATADIR/pretrained` and are:
 2. `fn`: The network transcribing first, middle, and last names.
 3. `ln`: The network transcribing last names.
 
-To use, e.g., the model `ln`, you can either copy/paste the folder `DATADIR/pretrained/ln` and use that location as `ROOT` or you can specify `ROOT` as `DATADIR/pretrained/ln`.
+To use, e.g., the model `ln`, you can either copy/paste the folder `DATADIR/pretrained/ln` to somewhere else and use that new location as `ROOT` or you can specify `ROOT` as `DATADIR/pretrained/ln` directly.
 
 ### Perform Matching
 
@@ -86,13 +85,15 @@ Note that the dictionaries used to perform matching are in `DATADIR`, which is w
 
 ### Calculate Word Accuracies
 
-To obtain word acccuracy rates and accuracy rates at a specified level of recall, first make sure to have a file with predictions.
-Suppose this file was called `path/to/preds.csv`.
+To obtain word acccuracy rates and word accuracy rates at a specified level of recall, first make sure to have a file with predictions.
+Suppose this file is called `path/to/preds.csv`.
 Then use the command below:
 ```
 python get_accuracies.py --fn-preds path/to/preds.csv
 ```
 This will print the overall word accuracy and the accuracy at 90% recall.
+
+If you provide a file with predictions that also includes predictions using matching, the word accuracy when using matching will also be printed.
 
 To use a different level of recall, you can specify it using the command `--recall`.
 
@@ -106,3 +107,4 @@ To use a different level of recall, you can specify it using the command `--reca
 - [ ] Is recall the right word to use? In paper and in code
 - [ ] Link to paper
 - [ ] Use Torch Hub?
+- [ ] debug mode
