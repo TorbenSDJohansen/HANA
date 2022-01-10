@@ -73,4 +73,38 @@ SETTINGS = {
                 },
             },
         },
+    'ln-danish-census-small': {
+        'data_info': {
+            'cells': [f'name-{x}' for x in range(1, 26)],
+            'root_labels': '{}/danish-census/labels/small/',
+            'root_images': '{}/danish-census/minipics/',
+            'batch_size': 256,
+            'nb_epochs': 100,
+            'transform_label': transform_label_individual_name,
+            'clean_pred': clean_pred_individual_name,
+            },
+        'model_info': {
+            'resnet50-multi-branch': {
+                **MODEL_DEFAULT_INFO,
+                'output_sizes': [MISSING_INDICATOR + 1] * MAX_INDIVIDUAL_NAME_LEN,
+                },
+            },
+        },
+    'ln-danish-census-large': {
+        'data_info': {
+            'cells': [f'name-{x}' for x in range(1, 26)],
+            'root_labels': '{}/danish-census/labels/large/',
+            'root_images': '{}/danish-census/minipics/',
+            'batch_size': 256,
+            'nb_epochs': 100,
+            'transform_label': transform_label_individual_name,
+            'clean_pred': clean_pred_individual_name,
+            },
+        'model_info': {
+            'resnet50-multi-branch': {
+                **MODEL_DEFAULT_INFO,
+                'output_sizes': [MISSING_INDICATOR + 1] * MAX_INDIVIDUAL_NAME_LEN,
+                },
+            },
+        },
     }

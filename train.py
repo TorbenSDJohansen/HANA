@@ -107,6 +107,7 @@ def parse_args():
     parser.add_argument('--root', type=str)
     parser.add_argument('--datadir', type=str)
     parser.add_argument('--batch-size', type=int, default=None)
+    parser.add_argument('--fn-pretrained', type=str, default=None)
     parser.add_argument('--debug', type=int, default=None, help='Keep only specified number of obs. for debugging.')
 
     args = parser.parse_args()
@@ -122,13 +123,19 @@ def main():
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu") # pylint: disable=E1101
 
-    data_info = SETTINGS[settings]['data_info']
-    model_info = SETTINGS[settings]['model_info']
+    data_info = SETTINGS[settings]['data_info'].copy()
+    model_info = SETTINGS[settings]['model_info'].copy()
 
     data_info['root_labels'] = data_info['root_labels'].format(args.datadir)
     data_info['root_images'] = data_info['root_images'].format(args.datadir)
 
     data_info['batch_size'] = args.batch_size or data_info['batch_size']
+
+    if args.fn_pretrained is not None:
+        print(f'Starting training from pretrained model {args.fn_pretrained}.')
+        model_name = list(model_info.keys())[0]
+        model_info[model_name]['fn_pretrained'] = args.fn_pretrained
+        model_info[model_name + '-pretrained'] = model_info.pop(model_name)
 
     if args.debug is not None:
         print(f'Debug mode using {args.debug} number of observations.')

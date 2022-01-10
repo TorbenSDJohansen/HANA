@@ -289,6 +289,10 @@ def _setup_model_optimizer(
         classifier=info['classifier'],
         output_sizes=info['output_sizes'],
         ).to(device)
+
+    if 'fn_pretrained' in info.keys():
+        model.load_state_dict(torch.load(info['fn_pretrained']), strict=False)
+
     optimizer = torch.optim.SGD(
         params=model.parameters(),
         lr=info['learning_rate'] * batch_size / 256,

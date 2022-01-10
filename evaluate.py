@@ -158,8 +158,8 @@ def main():
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu") # pylint: disable=E1101
 
-    data_info = SETTINGS[settings]['data_info']
-    model_info = SETTINGS[settings]['model_info']
+    data_info = SETTINGS[settings]['data_info'].copy()
+    model_info = SETTINGS[settings]['model_info'].copy()
 
     data_info['root_labels'] = data_info['root_labels'].format(args.datadir)
     data_info['root_images'] = data_info['root_images'].format(args.datadir)
