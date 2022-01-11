@@ -121,6 +121,7 @@ To use a different level of recall, you can specify it using the command `--reca
 - [ ] Link to paper
 - [ ] Use Torch Hub?
 - [ ] debug mode
+- [ ] predict on folder or something similar
 
 ## Citing
 
