@@ -135,7 +135,6 @@ def main():
         print(f'Starting training from pretrained model {args.fn_pretrained}.')
         model_name = list(model_info.keys())[0]
         model_info[model_name]['fn_pretrained'] = args.fn_pretrained
-        model_info[model_name + '-pretrained'] = model_info.pop(model_name)
 
     if args.debug is not None:
         print(f'Debug mode using {args.debug} number of observations.')

@@ -123,7 +123,6 @@ def evaluate(
         'pred': preds_clean,
         'prob': seq_prob,
         })
-
     pred_df.to_csv(fn_preds, index=False)
 
 
@@ -170,8 +169,11 @@ def main():
         print(f'Debug mode using {args.debug} number of observations.')
         data_info['debug'] = args.debug
 
-    # Want to study test performance.
-    data_info['cells'] = [(data_info['cells'][0][0].replace('train', 'test'), data_info['cells'][0][1])]
+    # FIXME Want to study test performance.
+    if isinstance(data_info['cells'][0], tuple):
+        data_info['cells'] = [(data_info['cells'][0][0].replace('train', 'test'), data_info['cells'][0][1])]
+    else:
+        data_info['root_labels'] = os.path.join(data_info['root_labels'], 'test/')
 
     evaluate(data_info, model_info, device, root, fn_results, fn_preds)
 
