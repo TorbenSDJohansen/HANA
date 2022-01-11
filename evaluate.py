@@ -136,6 +136,7 @@ def parse_args():
     parser.add_argument('--fn-preds', type=str, default=None)
     parser.add_argument('--batch-size', type=int, default=1024)
     parser.add_argument('--debug', type=int, default=None, help='Keep only specified number of obs. for debugging.')
+    parser.add_argument('--custom-name', type=str, default=None)
 
     args = parser.parse_args()
 
@@ -164,6 +165,12 @@ def main():
     data_info['root_images'] = data_info['root_images'].format(args.datadir)
 
     data_info['batch_size'] = args.batch_size
+
+    model_name = list(model_info.keys())[0]
+
+    if args.custom_name is not None:
+        model_info[args.custom_name] = model_info.pop(model_name)
+        model_name = args.custom_name
 
     if args.debug is not None:
         print(f'Debug mode using {args.debug} number of observations.')

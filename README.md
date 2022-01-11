@@ -111,7 +111,6 @@ To use a different level of recall, you can specify it using the command `--reca
 Replicating our transfer learning results mostly follow from replicating our other results; make sure to read those sections first.
 Suppose you are transfer learning from a model `path/to/tl-model.pt`.
 
-
 ### Train Neural Networks
 To train the model on the small sample of the Danish census data, use the command:
 ```

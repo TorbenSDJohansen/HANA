@@ -109,6 +109,8 @@ def parse_args():
     parser.add_argument('--batch-size', type=int, default=None)
     parser.add_argument('--fn-pretrained', type=str, default=None)
     parser.add_argument('--debug', type=int, default=None, help='Keep only specified number of obs. for debugging.')
+    parser.add_argument('--lr', type=float, default=None)
+    parser.add_argument('--custom-name', type=str, default=None)
 
     args = parser.parse_args()
 
@@ -131,10 +133,19 @@ def main():
 
     data_info['batch_size'] = args.batch_size or data_info['batch_size']
 
+    model_name = list(model_info.keys())[0]
+
+    if args.custom_name is not None:
+        model_info[args.custom_name] = model_info.pop(model_name)
+        model_name = args.custom_name
+
     if args.fn_pretrained is not None:
         print(f'Starting training from pretrained model {args.fn_pretrained}.')
-        model_name = list(model_info.keys())[0]
         model_info[model_name]['fn_pretrained'] = args.fn_pretrained
+
+    if args.lr is not None:
+        print(f'Using custom learning rate: {args.lr}.')
+        model_info[model_name]['learning_rate'] = args.lr
 
     if args.debug is not None:
         print(f'Debug mode using {args.debug} number of observations.')
