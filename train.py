@@ -111,6 +111,7 @@ def parse_args():
     parser.add_argument('--debug', type=int, default=None, help='Keep only specified number of obs. for debugging.')
     parser.add_argument('--lr', type=float, default=None)
     parser.add_argument('--custom-name', type=str, default=None)
+    parser.add_argument('--to-freeze', type=str, nargs='+', default=None)
 
     args = parser.parse_args()
 
@@ -119,6 +120,7 @@ def parse_args():
 
 def main():
     args = parse_args()
+    print(args)
 
     settings = args.settings
     root = args.root
@@ -146,6 +148,9 @@ def main():
     if args.lr is not None:
         print(f'Using custom learning rate: {args.lr}.')
         model_info[model_name]['learning_rate'] = args.lr
+
+    if args.to_freeze is not None:
+        model_info[model_name]['to_freeze'] = args.to_freeze
 
     if args.debug is not None:
         print(f'Debug mode using {args.debug} number of observations.')

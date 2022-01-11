@@ -207,10 +207,11 @@ class NetworkExperimentSequences():
         x_train = data['image'][:1]
         self.info = dict()
 
-        start_epoch = 0
+        start_epoch = []
 
         for model_name in self.models.keys():
             epoch, step = self._load_model(model_name)
+            start_epoch.append(epoch)
             writer = self._setup_tensorboard(model_name, x_train, step)
 
             self.info[model_name] = {
@@ -221,8 +222,7 @@ class NetworkExperimentSequences():
 
             self.models[model_name]['model'].train()
 
-        if len(self.models.keys()) == 1:
-            start_epoch = epoch
+        start_epoch = min(start_epoch)
 
         return start_epoch
 

@@ -7,6 +7,7 @@ Created on Wed Jan  5 13:54:58 2022
 
 
 import string
+import functools
 
 import torch
 
@@ -278,6 +279,20 @@ def get_pipe(nb_augments: int = 3, magnitude: int = 5) -> dict:
     return pipe
 
 
+def _rgetattr(obj, attr, *args):
+    # https://stackoverflow.com/questions/31174295/getattr-and-setattr-on-nested-subobjects-chained-properties
+    # Simple way to retrieve attributes of attributes (i.e. solve the problem
+    # of nested objects). Useful to freeze (and unfreeze) layers that consists
+    # of other layers.
+    # This way, a PART of a submodule can be frozen. For example, if a module
+    # contains a submodule for feature extraction, a submodule of the feature
+    # extraction submodule can be frozen (rather than only the entire feature
+    # extraction submodule)
+    def _getattr(obj, attr):
+        return getattr(obj, attr, *args)
+    return functools.reduce(_getattr, [obj] + attr.split('.'))
+
+
 def _setup_model_optimizer(
         info: dict,
         batch_size: int,
@@ -292,6 +307,13 @@ def _setup_model_optimizer(
 
     if 'fn_pretrained' in info.keys():
         model.load_state_dict(torch.load(info['fn_pretrained']), strict=False)
+
+    if 'to_freeze' in info.keys():
+        for layer in info['to_freeze']:
+            print(f'Freezing {layer}!')
+            params = _rgetattr(model, layer).parameters()
+            for param in params:
+                param.requires_grad = False
 
     optimizer = torch.optim.SGD(
         params=model.parameters(),
