@@ -146,8 +146,7 @@ python evaluate.py --settings ln-danish-census-large --root ROOT --datadir DATAD
 ```
 
 ### Matching and Calculating Word Accuracies
-The remaining steps are identical to what has previously been described.
-For the transfer learning model on the small sample of the Danish census data, use the commands:
+The remaining steps are identical to what has previously been described:
 ```
 python matching.py --root ROOT --datadir DATADIR
 python get_accuracies.py --fn-preds path/to/preds.csv
@@ -161,7 +160,6 @@ python get_accuracies.py --fn-preds path/to/preds.csv
 - [ ] Explaining settings.py
 - [ ] Is recall the right word to use? In paper and in code
 - [ ] Link to paper
-- [ ] Use Torch Hub?
 - [ ] debug mode
 - [ ] predict on folder or something similar
 
