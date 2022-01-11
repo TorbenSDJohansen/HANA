@@ -3,6 +3,7 @@ Code related to the paper HANA: A HAndwritten NAme Database for Offline Handwrit
 
 - [Download Database](#download-database)
 - [Replicate Results](#replicate-results)
+- [Replicate Transfer Learning Results](#replicate-transfer-learning-results)
 - [TODO](#todo)
 - [Citing](#citing)
 
@@ -30,8 +31,7 @@ conda install pytorch=1.9 torchvision=0.10 torchaudio cudatoolkit=10.2 -c pytorc
 ```
 
 ### Train Neural Networks
-
-To train the neural network transcribing only last names, use the command below:
+To train the neural network transcribing only last names, use the command:
 ```
 python train.py --settings ln --root ROOT --datadir DATADIR
 ```
@@ -50,7 +50,6 @@ python train.py --settings fln --root ROOT --datadir DATADIR
 ```
 
 ### Predict/Evaluate
-
 To evaluate a trained model on the test set, and obtain predictions on all samples in the test set, first make sure to have a trained model in `ROOT`.
 Then use the command below for the network transcribing only last names:
 ```
@@ -81,9 +80,8 @@ The pretrained models are located in `DATADIR/pretrained` and are:
 To use, e.g., the model `ln`, you can either copy/paste the folder `DATADIR/pretrained/ln` to somewhere else and use that new location as `ROOT` or you can specify `ROOT` as `DATADIR/pretrained/ln` directly.
 
 ### Perform Matching
-
 To perform matching, first make sure to have a file with predictions.
-Then use the command below:
+Then use the command:
 ```
 python matching.py --root ROOT --datadir DATADIR
 ```
@@ -97,10 +95,9 @@ In that case, you do not need to provide an argument for `--root`.
 Note that the dictionaries used to perform matching are in `DATADIR`, which is why it must be specified as an argument.
 
 ### Calculate Word Accuracies
-
 To obtain word acccuracy rates and word accuracy rates at a specified level of recall, first make sure to have a file with predictions.
 Suppose this file is called `path/to/preds.csv`.
-Then use the command below:
+Then use the command:
 ```
 python get_accuracies.py --fn-preds path/to/preds.csv
 ```
@@ -110,8 +107,53 @@ If you provide a file with predictions that also includes predictions using matc
 
 To use a different level of recall, you can specify it using the command `--recall`.
 
-## TODO
+## Replicate Transfer Learning Results
+Replicating our transfer learning results mostly follow from replicating our other results; make sure to read those sections first.
+Suppose you are transfer learning from a model `path/to/tl-model.pt`.
 
+
+### Train Neural Networks
+To train the model on the small sample of the Danish census data, use the command:
+```
+python train.py --settings ln-danish-census-small-tl --root ROOT --datadir DATADIR --fn-pretrained path/to/tl-model.pt
+```
+To train the model on the same data but not transfer learning from one of the HANA models, use the command:
+```
+python train.py --settings ln-danish-census-small --root ROOT --datadir DATADIR
+```
+
+To train the models (with and without transfer learning from the HANA database, respectively) on the large sample of the Danish census data, use the commands:
+```
+python train.py --settings ln-danish-census-large-tl --root ROOT --datadir DATADIR --fn-pretrained path/to/tl-model.pt
+python train.py --settings ln-danish-census-large --root ROOT --datadir DATADIR
+```
+
+If you have not trained a model yourself, you can use those provided when you downloaded the database.
+That is, you can specify `--fn-pretrained DATADIR/pretrained/ln/logs/resnet50-multi-branch/model_389700.pt`.
+
+### Predict/Evaluate
+Evaluating a model and obtaining predictions on the test set of the Danish census data is similar to what has previously been described.
+For the transfer learning model on the small sample of the Danish census data, use the command:
+```
+python evaluate.py --settings ln-danish-census-small-tl --root ROOT --datadir DATADIR
+```
+
+For the model without transfer learning from the HANA database on the small sample of the Danish census data, the model transfer learning on the large sample, and the model not transfer learning on the large sample, respectively, use the commands:
+```
+python evaluate.py --settings ln-danish-census-small --root ROOT --datadir DATADIR
+python evaluate.py --settings ln-danish-census-large-tl --root ROOT --datadir DATADIR
+python evaluate.py --settings ln-danish-census-large --root ROOT --datadir DATADIR
+```
+
+### Matching and Calculating Word Accuracies
+The remaining steps are identical to what has previously been described.
+For the transfer learning model on the small sample of the Danish census data, use the commands:
+```
+python matching.py --root ROOT --datadir DATADIR
+python get_accuracies.py --fn-preds path/to/preds.csv
+```
+
+## TODO
 - [ ] How to download database
 - [x] How to prepare environment, including which packages are needed
 - [ ] Explain Resuming training. Maybe use line 242 in networks/expriment.py to change self.epoch before main loop: self.epochs -= epochs
@@ -126,7 +168,6 @@ To use a different level of recall, you can specify it using the command `--reca
 ## Citing
 
 ### BibTeX
-
 ```bibtex
 @article{tsdj2022hana,
   author = {XXX},
