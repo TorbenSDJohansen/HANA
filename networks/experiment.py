@@ -8,26 +8,12 @@ Contains the code in which the experiment is conducted.
 import os
 import types
 import json
-import functools
 
 import torch
 
 from torch.utils.tensorboard import SummaryWriter
 
 from networks.util.pytorch_functions import split_data
-
-def _rgetattr(obj, attr, *args):
-    # https://stackoverflow.com/questions/31174295/getattr-and-setattr-on-nested-subobjects-chained-properties
-    # Simple way to retrieve attributes of attributes (i.e. solve the problem
-    # of nested objects). Useful to freeze (and unfreeze) layers that consists
-    # of other layers.
-    # This way, a PART of a submodule can be frozen. For example, if a module
-    # contains a submodule for feature extraction, a submodule of the feature
-    # extraction submodule can be frozen (rather than only the entire feature
-    # extraction submodule)
-    def _getattr(obj, attr):
-        return getattr(obj, attr, *args)
-    return functools.reduce(_getattr, [obj] + attr.split('.'))
 
 
 class NetworkExperimentSequences():
@@ -213,23 +199,6 @@ class NetworkExperimentSequences():
 
         return writer
 
-    def _freeze_layers(self, model_name):
-        if 'to_freeze' in self.models[model_name].keys():
-            for layer in self.models[model_name]['to_freeze']:
-                print(f'Freezing {layer}!')
-                params = _rgetattr(self.models[model_name]['model'], layer).parameters()
-                for param in params:
-                    param.requires_grad = False
-
-    def _unfreeze_layers(self, model_name: str, step: int):
-        if 'to_unfreeze' in self.models[model_name].keys():
-            for layer, when in self.models[model_name]['to_unfreeze']:
-                if when == step:
-                    print(f'Unfreezing {layer} at step {step}!')
-                    params = _rgetattr(self.models[model_name]['model'], layer).parameters()
-                    for param in params:
-                        param.requires_grad = True
-
     def _setup(self):
         ''' Setup the models, such as retrieving information on current
         epoch and step as well as set up writers.
@@ -237,6 +206,8 @@ class NetworkExperimentSequences():
         data = next(iter(self.dataset))
         x_train = data['image'][:1]
         self.info = dict()
+
+        start_epoch = 0
 
         for model_name in self.models.keys():
             epoch, step = self._load_model(model_name)
@@ -248,8 +219,12 @@ class NetworkExperimentSequences():
                 'writer': writer,
                 }
 
-            self._freeze_layers(model_name)
             self.models[model_name]['model'].train()
+
+        if len(self.models.keys()) == 1:
+            start_epoch = epoch
+
+        return start_epoch
 
     def _write_loss_tb(self, model_name, step, prefix, seq_loss, losses):
         ''' Writes a loss (a scalar) to tensorboard for specific model. '''
@@ -389,8 +364,6 @@ Saving every {self.save_interval} step.
         if self.info[model_name]['step'] % self.save_interval == 0:
             self._save_model(model_name)
 
-        self._unfreeze_layers(model_name, self.info[model_name]['step'])
-
     def run(self, test_data=None):
         ''' Only "public" method, which runs the experiment. If test data is
         provided, it logs the test losses.
@@ -406,9 +379,9 @@ Saving every {self.save_interval} step.
             del test_data
 
         self._print_run_info()
-        self._setup()
+        start_epoch = self._setup()
 
-        for epoch in range(self.epochs):
+        for epoch in range(start_epoch, self.epochs):
             try:
                 print(f'Starting epoch {epoch + 1} of {self.epochs}')
                 self.running_losses = {model_name: 0 for model_name in self.models.keys()}

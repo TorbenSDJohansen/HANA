@@ -154,7 +154,7 @@ python get_accuracies.py --fn-preds path/to/preds.csv
 ## TODO
 - [ ] How to download database
 - [x] How to prepare environment, including which packages are needed
-- [ ] Explain Resuming training. Maybe use line 242 in networks/expriment.py to change self.epoch before main loop: self.epochs -= epochs
+- [x] Resuming training
 - [ ] Transfer learning
 - [ ] Explaining settings.py
 - [ ] Is recall the right word to use? In paper and in code
