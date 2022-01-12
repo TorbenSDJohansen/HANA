@@ -110,7 +110,7 @@ SETTINGS = {
     }
 
 SETTINGS['ln-danish-census-small-tl'] = SETTINGS['ln-danish-census-small'].copy()
-SETTINGS['ln-danish-census-small-tl']['model_info']['resnet50-multi-branch']['learning_rate'] /= 10
+SETTINGS['ln-danish-census-small-tl']['model_info']['resnet50-multi-branch']['learning_rate'] = 0.001
 
 SETTINGS['ln-danish-census-large-tl'] = SETTINGS['ln-danish-census-large'].copy()
-SETTINGS['ln-danish-census-large-tl']['model_info']['resnet50-multi-branch']['learning_rate'] /= 10
+SETTINGS['ln-danish-census-large-tl']['model_info']['resnet50-multi-branch']['learning_rate'] = 0.001
