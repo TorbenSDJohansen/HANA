@@ -186,6 +186,7 @@ def parse_args():
     parser.add_argument('--fn-preds', type=str, default=None)
 
     parser.add_argument('--max-nb-middle-names', type=int, default=MAX_NB_MIDDLE_NAMES)
+    parser.add_argument('--allow-empty', type=str, nargs='+', default=['first', 'middle'])
 
     args = parser.parse_args()
 
@@ -200,7 +201,12 @@ def construct_lookup(args):
     middle = np.load(args.fn_lex_middle, allow_pickle=True) if args.fn_lex_middle else ['']
     last = np.load(args.fn_lex_last, allow_pickle=True) if args.fn_lex_last else ['']
 
-    return {'first': set(first), 'middle': set(middle), 'last': set(last)}
+    lookup = {'first': set(first), 'middle': set(middle), 'last': set(last)}
+
+    for allow_empty in args.allow_empty:
+        lookup[allow_empty] = lookup[allow_empty].union(set(['']))
+
+    return lookup
 
 
 def main():
