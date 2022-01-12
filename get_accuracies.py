@@ -10,11 +10,11 @@ import numpy as np
 import pandas as pd
 
 
-def get_word_acc(data, recall, predcol):
-    threshold = np.quantile(data['prob'], 1 - recall)
+def get_word_acc(data, coverage, predcol):
+    threshold = np.quantile(data['prob'], 1 - coverage)
     sub = data[data['prob'] >= threshold]
 
-    realized_recall = len(sub) / len(data)
+    realized_cov = len(sub) / len(data)
 
     is_correct = 0
     counter = 0
@@ -48,23 +48,23 @@ def get_word_acc(data, recall, predcol):
 
     acc = is_correct / counter
 
-    print(f'Recall: {round(100 * realized_recall, 2)}%. Word accuracy: {round(100 * acc, 2)}%.')
+    print(f'Coverage: {round(100 * realized_cov, 2)}%. Word accuracy: {round(100 * acc, 2)}%.')
 
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Get word accuracies')
 
     parser.add_argument('--fn-preds', type=str)
-    parser.add_argument('--recall', type=float, default=None)
+    parser.add_argument('--coverage', type=float, default=None)
 
     args = parser.parse_args()
 
-    if args.recall is None:
-        args.recall = 0.9
+    if args.coverage is None:
+        args.coverage = 0.9
     else:
-        if 1 < args.recall < 100:
-            args.recall /= 100
-        assert 0 < args.recall < 1, args.recall
+        if 1 < args.coverage < 100:
+            args.coverage /= 100
+        assert 0 < args.coverage < 1, args.coverage
 
     return args
 
@@ -75,12 +75,12 @@ def main():
     preds = pd.read_csv(args.fn_preds)
 
     get_word_acc(preds, 1, 'pred')
-    get_word_acc(preds, args.recall, 'pred')
+    get_word_acc(preds, args.coverage, 'pred')
 
     if 'pred_m' in preds.columns:
         print('\nUsing matched predictions:')
         get_word_acc(preds, 1, 'pred_m')
-        get_word_acc(preds, args.recall, 'pred_m')
+        get_word_acc(preds, args.coverage, 'pred_m')
 
 
 if __name__ == '__main__':

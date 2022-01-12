@@ -14,7 +14,7 @@ Code related to the paper HANA: A HAndwritten NAme Database for Offline Handwrit
 To replicate our results, follow the steps in the sections below.
 Note the following abbreviations used below:
 1. `DATADIR`: This is the directory where you store the HANA database.
-2. `ROOT`: This is the directory where you save a model and its output. Each neural network has its own `ROOT`.
+2. `ROOT`: This is the directory where you save a model and its output. Each neural network should have its own `ROOT`.
 
 ### Clone Repository and Prepare Environment
 
@@ -81,31 +81,40 @@ To use, e.g., the model `ln`, you can either copy/paste the folder `DATADIR/pret
 
 ### Perform Matching
 To perform matching, first make sure to have a file with predictions.
-Then use the command:
+Then, use appropriate lexicons to match the predictions to.
+For the network transcribing last names, use the command:
 ```
-python matching.py --root ROOT --datadir DATADIR
+python matching.py --root ROOT --fn-lex-last DATADIR/last_names.npy
 ```
 This will then write two files to `ROOT`:
 1. `eval_results_matched.pkl`: Extends `eval_results.pkl` to include accuracy with matching and number of matches made.
 2. `preds_matched.csv`: Extends `preds.csv` to include a column of predictions using matching.
 
-If you provided arguments for `--fn-preds` and `--fn-results` when evaluating/predicting, you must also provide those here.
+For the network transcribing first and last names:
+```
+python matching.py --root ROOT --fn-lex-last DATADIR/last_names.npy --fn-lex-first DATADIR/first_names.npy
+```
+
+For the network transcribing first, middle, and last names:
+```
+python matching.py --root ROOT --fn-lex-last DATADIR/last_names.npy --fn-lex-first DATADIR/first_names.npy --fn-lex-middle DATADIR/middle_names.npy
+```
+
+**Note**: If you provided arguments for `--fn-preds` and `--fn-results` when evaluating/predicting, you must also provide those here.
 In that case, you do not need to provide an argument for `--root`.
 
-Note that the dictionaries used to perform matching are in `DATADIR`, which is why it must be specified as an argument.
-
 ### Calculate Word Accuracies
-To obtain word acccuracy rates and word accuracy rates at a specified level of recall, first make sure to have a file with predictions.
+To obtain word acccuracy rates and word accuracy rates at a specified level of coverage, first make sure to have a file with predictions.
 Suppose this file is called `path/to/preds.csv`.
 Then use the command:
 ```
 python get_accuracies.py --fn-preds path/to/preds.csv
 ```
-This will print the overall word accuracy and the accuracy at 90% recall.
+This will print the overall word accuracy and the accuracy at 90% coverage.
 
 If you provide a file with predictions that also includes predictions using matching, the word accuracy when using matching will also be printed.
 
-To use a different level of recall, you can specify it using the command `--recall`.
+To use a different level of coverage, you can specify it using the command `--coverage`.
 
 ## Replicate Transfer Learning Results
 Replicating our transfer learning results mostly follow from replicating our other results; make sure to read those sections first.
@@ -127,7 +136,7 @@ python train.py --settings ln-danish-census-large-tl --root ROOT --datadir DATAD
 python train.py --settings ln-danish-census-large --root ROOT --datadir DATADIR
 ```
 
-If you have not trained a model yourself, you can use those provided when you downloaded the database.
+If you have not trained a model to transfer learn from yourself, you can use those provided when you downloaded the database.
 That is, you can specify `--fn-pretrained DATADIR/pretrained/ln/logs/resnet50-multi-branch/model_389700.pt`.
 
 ### Predict/Evaluate
@@ -144,10 +153,22 @@ python evaluate.py --settings ln-danish-census-large-tl --root ROOT --datadir DA
 python evaluate.py --settings ln-danish-census-large --root ROOT --datadir DATADIR
 ```
 
+#### Without Training A Model
+If you have not trained a model yourself, you can use those provided when you downloaded the database; this is done in the same way as described above.
+This way you can exactly replicate the numbers from the paper.
+The pretrained models are located in `DATADIR/pretrained` and are:
+**TODO**
+1. `ln-danish-census-large`
+2. `ln-danish-census-large-tl`
+3. `ln-danish-census-small`
+4. `ln-danish-census-small-tl`
+
+To use, e.g., the model `ln-danish-census-large-tl`, you can either copy/paste the folder `DATADIR/pretrained/ln-danish-census-large-tl` to somewhere else and use that new location as `ROOT` or you can specify `ROOT` as `DATADIR/pretrained/ln-danish-census-large-tl` directly.
+
 ### Matching and Calculating Word Accuracies
 The remaining steps are identical to what has previously been described:
 ```
-python matching.py --root ROOT --datadir DATADIR
+python matching.py --root ROOT --fn-lex-last DATADIR/danish-census/last_names.npy
 python get_accuracies.py --fn-preds path/to/preds.csv
 ```
 
@@ -155,12 +176,15 @@ python get_accuracies.py --fn-preds path/to/preds.csv
 - [ ] How to download database
 - [x] How to prepare environment, including which packages are needed
 - [x] Resuming training
-- [ ] Transfer learning
+- [x] Transfer learning
 - [ ] Explaining settings.py
-- [ ] Is recall the right word to use? In paper and in code
+- [x] Is recall the right word to use? In paper and in code
 - [ ] Link to paper
-- [ ] debug mode
+- [ ] Explain optional args
 - [ ] predict on folder or something similar
+- [ ] Guide to prepare data to train (incl. TL) on own data
+- [ ] Add pretrained models to package
+- [ ] Generalize matching to be able to use different lexicons etc. Rewrite README on matching
 
 ## Citing
 
