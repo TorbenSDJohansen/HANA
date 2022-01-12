@@ -183,8 +183,8 @@ python get_accuracies.py --fn-preds path/to/preds.csv
 - [ ] Explain optional args
 - [ ] predict on folder or something similar
 - [ ] Guide to prepare data to train (incl. TL) on own data
-- [ ] Add pretrained models to package
-- [ ] Generalize matching to be able to use different lexicons etc. Rewrite README on matching
+- [x] Add pretrained models to package
+- [x] Generalize matching to be able to use different lexicons etc. Rewrite README on matching
 
 ## Citing
 
