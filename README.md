@@ -46,7 +46,7 @@ python train.py --settings fln --root ROOT --datadir DATADIR
 
 To train the network transcribing first, middle, and last names:
 ```
-python train.py --settings fln --root ROOT --datadir DATADIR
+python train.py --settings fn --root ROOT --datadir DATADIR
 ```
 
 ### Predict/Evaluate
@@ -66,7 +66,7 @@ python evaluate.py --settings fln --root ROOT --datadir DATADIR
 
 For the network transcribing first, middle, and last names:
 ```
-python evaluate.py --settings fln --root ROOT --datadir DATADIR
+python evaluate.py --settings fn --root ROOT --datadir DATADIR
 ```
 
 #### Without Training A Model
