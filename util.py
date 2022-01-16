@@ -98,10 +98,6 @@ def _clean_pred_individual_name(raw_pred: np.ndarray, assert_consistency: bool =
 def transform_label_last_name(raw_input: str) -> np.ndarray:
     last_name = raw_input.split(' ')[-1]
 
-    # FIXME fix labels of these, we need to split on space
-    # From US Census labels, there may be spaces in names: Now remove.
-    # raw_input = ''.join(x for x in raw_input if x != ' ')
-
     return _transform_label_individual_name(last_name)
 
 
@@ -179,6 +175,8 @@ def transform_label_first_and_last_name(raw_input: str) -> np.ndarray:
     first_name = names[0]
     last_name = names[-1]
 
+    mod_input = ' '.join((first_name, last_name))
+
     label = []
 
     for name in (first_name, last_name):
@@ -187,7 +185,7 @@ def transform_label_first_and_last_name(raw_input: str) -> np.ndarray:
     label = np.concatenate(label)
 
     # Assert cycle consistency
-    assert raw_input == clean_pred_first_and_last_name(label.astype(int), False)
+    assert mod_input == clean_pred_first_and_last_name(label.astype(int), False)
 
     return label
 
