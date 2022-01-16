@@ -114,7 +114,7 @@ def prepare_labels_csv(cells: list, root_labels: str, root_images: str) -> np.nd
         'image_dir': ''.join((root_images, cell[1], '/')),
         } for cell in cells}
     for value in labels_info.values():
-        labels = pd.read_csv(value['labels'])
+        labels = pd.read_csv(value['labels'], keep_default_na=False)
         value['array'] = _remove_labels_with_no_image(
             image_dir=value['image_dir'],
             labels=labels.values,

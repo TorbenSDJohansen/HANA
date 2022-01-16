@@ -26,7 +26,7 @@ class MatchToStr():
     potential_strs : set
         The valid strings to be matched to.
     cutoff : float
-        The lower threshold to performin matching. Must be in [0, 1]. Default
+        The lower threshold to performing matching. Must be in [0, 1]. Default
         is 0.6.
     ignore : set
         Cases of `strs_to_match` to ignore, i.e. not perform matching on.
@@ -194,9 +194,15 @@ def parse_args():
 
 
 def construct_lookup(args):
-    first = pd.read_csv(args.fn_lex_first).values.reshape(-1) if args.fn_lex_first else ['']
-    middle = pd.read_csv(args.fn_lex_middle).values.reshape(-1) if args.fn_lex_middle else ['']
-    last = pd.read_csv(args.fn_lex_last).values.reshape(-1) if args.fn_lex_last else ['']
+    first = pd.read_csv(
+        args.fn_lex_first, keep_default_na=False,
+        ).values.reshape(-1) if args.fn_lex_first else ['']
+    middle = pd.read_csv(
+        args.fn_lex_middle, keep_default_na=False,
+        ).values.reshape(-1) if args.fn_lex_middle else ['']
+    last = pd.read_csv(
+        args.fn_lex_last, keep_default_na=False,
+        ).values.reshape(-1) if args.fn_lex_last else ['']
 
     lookup = {'first': set(first), 'middle': set(middle), 'last': set(last)}
 
