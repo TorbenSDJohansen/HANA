@@ -11,13 +11,13 @@ import torch
 from torch.utils.data import DataLoader
 
 from networks.experiment import NetworkExperimentSequences
-from networks.util.setup_functions import prepare_labels
+from networks.util.setup_functions import prepare_labels_csv
 from networks.util.pytorch_functions import (
     sequence_loss, sequence_acc, sequence_loss_eval,
     )
 from networks.util.pytorch_datasets import SequenceDataset
 
-from util import get_pipe, _setup_model_optimizer
+from util import PipeConstructor, _setup_model_optimizer
 from settings import SETTINGS
 
 
@@ -50,7 +50,7 @@ def train(
 
     """
     print('Initializing generator.')
-    labels_raw = prepare_labels(
+    labels_raw = prepare_labels_csv(
         cells=data_info['cells'],
         root_labels=data_info['root_labels'],
         root_images=data_info['root_images'],
@@ -62,7 +62,7 @@ def train(
         labels_raw=labels_raw,
         transform_to_label=data_info['transform_label'],
         val_size=0.05,
-        transform_pipe=get_pipe(),
+        transform_pipe=PipeConstructor().get_pipe_from_settings(data_info),
         )
 
     print('Generating validation data.')
@@ -121,7 +121,6 @@ def parse_args():
 
 def main():
     args = parse_args()
-    print(args)
 
     settings = args.settings
     root = args.root
@@ -131,7 +130,7 @@ def main():
     data_info = SETTINGS[settings]['data_info'].copy()
     model_info = SETTINGS[settings]['model_info'].copy()
 
-    data_info['root_labels'] = data_info['root_labels'].format(args.datadir)
+    data_info['root_labels'] = data_info['root_labels'].format(args.datadir, 'train')
     data_info['root_images'] = data_info['root_images'].format(args.datadir)
 
     data_info['batch_size'] = args.batch_size or data_info['batch_size']

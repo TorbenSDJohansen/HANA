@@ -16,23 +16,14 @@ import numpy as np
 import pandas as pd
 
 from networks.constructor import load_models
-from networks.util.setup_functions import prepare_labels
+from networks.util.setup_functions import prepare_labels_csv
 from networks.util.pytorch_functions import (
     predict_sequence, eval_sequence,
     )
 from networks.util.pytorch_datasets import SequenceDataset
 
-from util import get_pipe
+from util import PipeConstructor
 from settings import SETTINGS
-
-
-def dict_to_str(clean: np.ndarray):
-    if isinstance(clean[0], str):
-        return clean
-
-    assert isinstance(clean[0], dict)
-
-    return np.array([' '.join((x['firstnames'], x['lastnames'])) for x in clean])
 
 
 def evaluate(
@@ -74,7 +65,7 @@ def evaluate(
     models = load_models(model_info, root, device)
 
     print('Initializing generator.')
-    labels_raw = prepare_labels(
+    labels_raw = prepare_labels_csv(
         cells=data_info['cells'],
         root_labels=data_info['root_labels'],
         root_images=data_info['root_images'],
@@ -86,7 +77,7 @@ def evaluate(
         labels_raw=labels_raw,
         transform_to_label=data_info['transform_label'],
         val_size=1.0,
-        transform_pipe=get_pipe(),
+        transform_pipe=PipeConstructor().get_pipe_from_settings(data_info),
         )
     generator.status = 'sample_val'
 
@@ -105,9 +96,6 @@ def evaluate(
     preds_clean = np.array(list(map(data_info['clean_pred'], preds)))
     labels_clean = np.array(list(map(data_info['clean_pred'], labels.astype(int))))
 
-    preds_clean = dict_to_str(preds_clean)
-    labels_clean = dict_to_str(labels_clean)
-
     acc, _, _ = eval_sequence(labels_clean, preds_clean, seq_prob)
 
     results = {
@@ -116,6 +104,7 @@ def evaluate(
         'Accuracy': acc,
         }
     pickle.dump(results, open(fn_results, 'wb'))
+    print(results)
 
     pred_df = pd.DataFrame({
         'filename_full': files,
@@ -161,7 +150,7 @@ def main():
     data_info = SETTINGS[settings]['data_info'].copy()
     model_info = SETTINGS[settings]['model_info'].copy()
 
-    data_info['root_labels'] = data_info['root_labels'].format(args.datadir)
+    data_info['root_labels'] = data_info['root_labels'].format(args.datadir, 'test')
     data_info['root_images'] = data_info['root_images'].format(args.datadir)
 
     data_info['batch_size'] = args.batch_size
@@ -175,12 +164,6 @@ def main():
     if args.debug is not None:
         print(f'Debug mode using {args.debug} number of observations.')
         data_info['debug'] = args.debug
-
-    # FIXME Want to study test performance.
-    if isinstance(data_info['cells'][0], tuple):
-        data_info['cells'] = [(data_info['cells'][0][0].replace('train', 'test'), data_info['cells'][0][1])]
-    else:
-        data_info['root_labels'] = os.path.join(data_info['root_labels'], 'test/')
 
     evaluate(data_info, model_info, device, root, fn_results, fn_preds)
 

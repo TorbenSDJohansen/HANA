@@ -9,6 +9,8 @@ import os
 import json
 
 import numpy as np
+import pandas as pd
+
 
 def _remove_labels_with_no_image(image_dir: str, labels: np.ndarray) -> np.ndarray:
     ''' This method ensures that only files where we have the label and
@@ -45,6 +47,7 @@ def prepare_labels(cells: list, root_labels: str, root_images: str) -> np.ndarra
     It also adds the path to the filename (such that a simple filename is
     transformed to a full path + filename).
     Finally, all label files are concatenated to create one array of labels.
+
     Parameters
     ----------
     cells : list
@@ -61,6 +64,7 @@ def prepare_labels(cells: list, root_labels: str, root_images: str) -> np.ndarra
     root_images : str
         The directory containing all the image folders. Images can be any
         standard type (.png, .jpg, etc.).
+
     Returns
     -------
     labels_merged : np.ndarray
@@ -84,6 +88,36 @@ def prepare_labels(cells: list, root_labels: str, root_images: str) -> np.ndarra
         value['array'] = _remove_labels_with_no_image(
             image_dir=value['image_dir'],
             labels=np.load(value['labels'], allow_pickle=True),
+            )
+        value['array'][:, 0] = [
+            ''.join((value['image_dir'], f)) for f in value['array'][:, 0]
+            ] # add path
+    labels_merged = np.concatenate(
+        [value['array'] for value in labels_info.values()]
+        )
+    return labels_merged
+
+
+def prepare_labels_csv(cells: list, root_labels: str, root_images: str) -> np.ndarray:
+    ''' See function prepare_labels
+    '''
+    cells = cells.copy()
+
+    for i, element in enumerate(cells):
+        if isinstance(element, str):
+            cells[i] = (element, element)
+        else:
+            assert isinstance(element, tuple) and len(element) == 2
+
+    labels_info = {cell: {
+        'labels': ''.join((root_labels, cell[0], '.csv')),
+        'image_dir': ''.join((root_images, cell[1], '/')),
+        } for cell in cells}
+    for value in labels_info.values():
+        labels = pd.read_csv(value['labels'])
+        value['array'] = _remove_labels_with_no_image(
+            image_dir=value['image_dir'],
+            labels=labels.values,
             )
         value['array'][:, 0] = [
             ''.join((value['image_dir'], f)) for f in value['array'][:, 0]

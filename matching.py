@@ -14,7 +14,7 @@ import re
 import pandas as pd
 import numpy as np
 
-from util import MAX_INDIVIDUAL_NAME_LEN, MAX_NB_MIDDLE_NAMES
+from util import MAX_INDIVIDUAL_NAME_LEN, MAX_NB_NAMES
 
 
 class MatchToStr():
@@ -185,21 +185,18 @@ def parse_args():
     parser.add_argument('--fn-results', type=str, default=None)
     parser.add_argument('--fn-preds', type=str, default=None)
 
-    parser.add_argument('--max-nb-middle-names', type=int, default=MAX_NB_MIDDLE_NAMES)
+    parser.add_argument('--max-nb-middle-names', type=int, default=MAX_NB_NAMES - 2)
     parser.add_argument('--allow-empty', type=str, nargs='+', default=['first', 'middle'])
 
     args = parser.parse_args()
-
-    if args.root is None:
-        assert args.fn_results is not None and args.fn_preds is not None
 
     return args
 
 
 def construct_lookup(args):
-    first = np.load(args.fn_lex_first, allow_pickle=True) if args.fn_lex_first else ['']
-    middle = np.load(args.fn_lex_middle, allow_pickle=True) if args.fn_lex_middle else ['']
-    last = np.load(args.fn_lex_last, allow_pickle=True) if args.fn_lex_last else ['']
+    first = pd.read_csv(args.fn_lex_first).values.reshape(-1) if args.fn_lex_first else ['']
+    middle = pd.read_csv(args.fn_lex_middle).values.reshape(-1) if args.fn_lex_middle else ['']
+    last = pd.read_csv(args.fn_lex_last).values.reshape(-1) if args.fn_lex_last else ['']
 
     lookup = {'first': set(first), 'middle': set(middle), 'last': set(last)}
 
@@ -211,6 +208,9 @@ def construct_lookup(args):
 
 def main():
     args = parse_args()
+
+    if args.root is None:
+        assert args.fn_results is not None and args.fn_preds is not None
 
     fn_results = args.fn_results
     fn_preds = args.fn_preds
@@ -232,6 +232,7 @@ def main():
 
     results.update(nb_matches)
     results['Accuracy (with matching)'] = acc
+    print(results)
 
     pickle.dump(results, open(fn_results.replace('.pkl', '_matched.pkl'), 'wb'))
     preds.to_csv(fn_preds.replace('.csv', '_matched.csv'), index=False)

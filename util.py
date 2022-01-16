@@ -8,6 +8,7 @@ Created on Wed Jan  5 13:54:58 2022
 
 import string
 import functools
+import re
 
 import torch
 
@@ -17,7 +18,7 @@ import numpy as np
 
 from networks.constructor import SequenceNet
 from networks.augment.rand_augment import RandAugment
-from networks.augment.augmenters import to_col
+from networks.augment.augmenters import to_col, ResizePad
 
 
 LETTERS = list(string.ascii_lowercase) + ['æ', 'ø', 'å']
@@ -26,20 +27,15 @@ MAP_IDX_LETTER = {v: k for k, v in MAP_LETTER_IDX.items()}
 
 MISSING_INDICATOR = 29
 MAX_INDIVIDUAL_NAME_LEN = 18
-MAX_NB_FIRST_NAMES = 9
-MAX_NB_LAST_NAMES = 1
-MAX_NB_MIDDLE_NAMES = MAX_NB_FIRST_NAMES - 1
+MAX_NB_NAMES = 10
 
-def transform_label_individual_name(raw_input: dict or str) -> np.ndarray:
+def _transform_label_individual_name(raw_input: str) -> np.ndarray:
     '''
-    Formats the last name to array of floats representing characters. The
+    Formats an individual name to array of floats representing characters. The
     floats are just integers cast to float, as that format is used for training
     the neural networks.
 
     '''
-    if isinstance(raw_input, dict):
-        raw_input = raw_input['lastnames']
-
     assert isinstance(raw_input, str)
 
     name_len = len(raw_input)
@@ -56,14 +52,14 @@ def transform_label_individual_name(raw_input: dict or str) -> np.ndarray:
     label = np.array(label)
 
     # Assert cycle consistency
-    assert raw_input == clean_pred_individual_name(label, False)
+    assert raw_input == _clean_pred_individual_name(label, False)
 
     label = label.astype('float')
 
     return label
 
 
-def clean_pred_individual_name(raw_pred: np.ndarray, assert_consistency: bool = True) -> str:
+def _clean_pred_individual_name(raw_pred: np.ndarray, assert_consistency: bool = True) -> str:
     '''
     Maps predictions back from integer to string representation.
 
@@ -91,7 +87,7 @@ def clean_pred_individual_name(raw_pred: np.ndarray, assert_consistency: bool = 
     # Need to be cycle consistent - however, the function may be called from
     # `transform_label`, and we do not want infinite recursion, hence the if.
     if assert_consistency:
-        transformed_clean = transform_label_individual_name(clean)
+        transformed_clean = _transform_label_individual_name(clean)
 
         if not all(pred.astype('float') == transformed_clean):
             raise Exception(raw_pred, pred, clean, transformed_clean)
@@ -99,28 +95,32 @@ def clean_pred_individual_name(raw_pred: np.ndarray, assert_consistency: bool = 
     return clean
 
 
-def transform_label_full_name(raw_input: dict) -> np.ndarray:
-    '''
-    Formats the name to array of floats representing characters. The floats are
-    just integers cast to float, as that format is used for training
-    the neural networks.
+def transform_label_last_name(raw_input: str) -> np.ndarray:
+    last_name = raw_input.split(' ')[-1]
 
-    '''
-    first_names = raw_input['firstnames'].split(' ')
-    last_names = raw_input['lastnames'].split(' ')
+    # FIXME fix labels of these, we need to split on space
+    # From US Census labels, there may be spaces in names: Now remove.
+    # raw_input = ''.join(x for x in raw_input if x != ' ')
 
-    nb_first_names = len(first_names)
-    nb_last_name = len(last_names)
+    return _transform_label_individual_name(last_name)
 
-    full_name = first_names + [''] * (MAX_NB_FIRST_NAMES - nb_first_names) + \
-        last_names + [''] * (MAX_NB_LAST_NAMES - nb_last_name)
 
-    assert len(full_name) == MAX_NB_FIRST_NAMES + MAX_NB_LAST_NAMES
+def clean_pred_last_name(raw_pred: np.ndarray, assert_consistency: bool = True) -> str:
+    return _clean_pred_individual_name(raw_pred, assert_consistency)
+
+
+def transform_label_full_name(raw_input: str) -> np.ndarray:
+    names = raw_input.split(' ')
+    last_name = names[-1:]
+    remaining = names[:-1]
+
+    nb_names = len(names)
+    full_name = remaining + [''] * (MAX_NB_NAMES - nb_names) + last_name
 
     label = []
 
     for name in full_name:
-        label.append(transform_label_individual_name(name))
+        label.append(_transform_label_individual_name(name))
 
     label = np.concatenate(label)
 
@@ -131,12 +131,10 @@ def transform_label_full_name(raw_input: dict) -> np.ndarray:
 
 
 def clean_pred_full_name(raw_pred: np.ndarray, assert_consistency: bool = True) -> str:
-    '''
-    Maps predictions back from integer to string representation.
-
-    '''
-    sub_preds = [raw_pred[i * MAX_INDIVIDUAL_NAME_LEN:(i + 1) * MAX_INDIVIDUAL_NAME_LEN]
-                 for i in range(MAX_NB_FIRST_NAMES + MAX_NB_LAST_NAMES)]
+    sub_preds = [
+        raw_pred[i * MAX_INDIVIDUAL_NAME_LEN:(i + 1) * MAX_INDIVIDUAL_NAME_LEN]
+        for i in range(MAX_NB_NAMES)
+        ]
 
     sub_preds_reordered = []
     empty_name = np.array([MISSING_INDICATOR] * MAX_INDIVIDUAL_NAME_LEN)
@@ -148,8 +146,8 @@ def clean_pred_full_name(raw_pred: np.ndarray, assert_consistency: bool = True) 
                 sub_pred_reordered.append(element)
         sub_pred_reordered += [MISSING_INDICATOR] * (MAX_INDIVIDUAL_NAME_LEN - len(sub_pred_reordered))
 
-        if i + 1 == MAX_NB_FIRST_NAMES + MAX_NB_LAST_NAMES:
-            sub_preds_reordered.extend([empty_name for _ in range(MAX_NB_FIRST_NAMES + MAX_NB_LAST_NAMES - 1 - len(sub_preds_reordered))])
+        if i + 1 == MAX_NB_NAMES:
+            sub_preds_reordered.extend([empty_name for _ in range(MAX_NB_NAMES - 1 - len(sub_preds_reordered))])
             sub_preds_reordered.append(np.array(sub_pred_reordered))
         else:
             if all(sub_pred_reordered == empty_name):
@@ -161,12 +159,9 @@ def clean_pred_full_name(raw_pred: np.ndarray, assert_consistency: bool = True) 
     names = []
 
     for sub_pred in sub_preds_reordered:
-        names.append(clean_pred_individual_name(sub_pred))
+        names.append(_clean_pred_individual_name(sub_pred, assert_consistency))
 
-    first_name = ' '.join((x for x in names[:MAX_NB_FIRST_NAMES] if x != ''))
-    last_name = ' '.join((x for x in names[MAX_NB_FIRST_NAMES:] if x != ''))
-
-    clean = {'firstnames': first_name, 'lastnames': last_name}
+    clean = re.sub(' +', ' ', ' '.join(names)).strip()
 
     # Need to be cycle consistent - however, the function may be called from
     # `transform_label`, and we do not want infinite recursion, hence the if.
@@ -179,43 +174,29 @@ def clean_pred_full_name(raw_pred: np.ndarray, assert_consistency: bool = True) 
     return clean
 
 
-def transform_label_first_and_last_name(raw_input: dict) -> np.ndarray:
-    '''
-    Formats the name to array of floats representing characters. The floats are
-    just integers cast to float, as that format is used for training
-    the neural networks.
-
-    Specifically for first and last name only (i.e. 2 names).
-
-    '''
-    first_name = raw_input['firstnames'].split(' ')[0]
-    last_name = raw_input['lastnames'].split(' ')[0]
-    full_name = [first_name] + [last_name]
-
-    mod = {'firstnames': first_name, 'lastnames': last_name}
+def transform_label_first_and_last_name(raw_input: str) -> np.ndarray:
+    names = raw_input.split(' ')
+    first_name = names[0]
+    last_name = names[-1]
 
     label = []
 
-    for name in full_name:
-        label.append(transform_label_individual_name(name))
+    for name in (first_name, last_name):
+        label.append(_transform_label_individual_name(name))
 
     label = np.concatenate(label)
 
     # Assert cycle consistency
-    assert mod == clean_pred_first_and_last_name(label.astype(int), False)
+    assert raw_input == clean_pred_first_and_last_name(label.astype(int), False)
 
     return label
 
 
 def clean_pred_first_and_last_name(raw_pred: np.ndarray, assert_consistency: bool = True) -> str:
-    '''
-    Maps predictions back from integer to string representation for first and
-    last name (i.e. 2 names).
-
-    '''
-
-    sub_preds = [raw_pred[i * MAX_INDIVIDUAL_NAME_LEN:(i + 1) * MAX_INDIVIDUAL_NAME_LEN]
-                 for i in range(2)]
+    sub_preds = [
+        raw_pred[i * MAX_INDIVIDUAL_NAME_LEN:(i + 1) * MAX_INDIVIDUAL_NAME_LEN]
+        for i in range(2)
+        ]
 
     sub_preds_reordered = []
 
@@ -232,12 +213,9 @@ def clean_pred_first_and_last_name(raw_pred: np.ndarray, assert_consistency: boo
     names = []
 
     for sub_pred in sub_preds_reordered:
-        names.append(clean_pred_individual_name(sub_pred))
+        names.append(_clean_pred_individual_name(sub_pred, assert_consistency))
 
-    first_name = names[0]
-    last_name = names[1]
-
-    clean = {'firstnames': first_name, 'lastnames': last_name}
+    clean = ' '.join(names)
 
     if assert_consistency:
         transformed_clean = transform_label_first_and_last_name(clean)
@@ -248,35 +226,70 @@ def clean_pred_first_and_last_name(raw_pred: np.ndarray, assert_consistency: boo
     return clean
 
 
-def get_pipe(nb_augments: int = 3, magnitude: int = 5) -> dict:
-    '''
-    Convinience for image transformation pipe construction.
-    Useful to have as a funciton with NO parameters (or at least defaults) to
-    import this to other files and ensure identical image preprocessing. This
-    is useful when the network is used for some other purpose, such as
-    prediciton on new images.
+class PipeConstructor(): # pylint: disable=C0115
+    _ALLOWED_RESIZE_METHODS = (
+        'resize_pad', 'resize',
+        )
+    resizer = None
 
-    '''
-    im_h, im_w = 160, 1045
-    scale_h, scale_w = 0.5, 0.5
-    resizer = transforms.Resize((int(im_h * scale_h), int(im_w * scale_w)))
-    pipe = {
-        'sample_train': transforms.Compose([
-            resizer,
-            to_col,
-            RandAugment(n=nb_augments, m=magnitude),
-            transforms.ToTensor(),
-            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
-            ]),
-        'sample_val': transforms.Compose([
-            resizer,
-            to_col,
-            transforms.ToTensor(),
-            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
-            ])
-        }
+    def init_resizer(self, resize_method, target_h, target_w):
+        """
+        Setup for image transformation resizer.
 
-    return pipe
+        Parameters
+        ----------
+        resize_method : str
+            The resize method uses to achieve desired image size.
+        target_h : int
+            The desired height.
+        target_w : int
+            The desired width.
+
+        """
+
+        assert resize_method in self._ALLOWED_RESIZE_METHODS
+        assert isinstance(target_h, int) and target_h > 0
+        assert isinstance(target_w, int) and target_w > 0
+
+        if resize_method == 'resize':
+            self.resizer = transforms.Resize((target_h, target_w))
+        elif resize_method == 'resize_pad':
+            # Maybe allow for type of padding to be controlled.
+            self.resizer = ResizePad(target_h, target_w, ('left', 'bottom'), 'constant')
+        else:
+            err_msg = (
+                'Must specify a valid resize method. Requested: '
+                + f'"{resize_method}". Allowed: {self._ALLOWED_RESIZE_METHODS}.'
+            )
+            raise Exception(err_msg)
+
+    def get_pipe(self, nb_augments: int = 3, magnitude: int = 5) -> dict: # pylint: disable=C0116
+        pipe = {
+            'sample_train': transforms.Compose([
+                self.resizer,
+                to_col,
+                RandAugment(n=nb_augments, m=magnitude),
+                transforms.ToTensor(),
+                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
+                ]),
+            'sample_val': transforms.Compose([
+                self.resizer,
+                to_col,
+                transforms.ToTensor(),
+                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
+                ])
+            }
+
+        return pipe
+
+    def get_pipe_from_settings(self, data_setting: dict) -> dict: # pylint: disable=C0116
+        self.init_resizer(
+            resize_method=data_setting['resize_method'],
+            target_h=data_setting['height'],
+            target_w=data_setting['width'],
+            )
+
+        return self.get_pipe()
 
 
 def _rgetattr(obj, attr, *args):
