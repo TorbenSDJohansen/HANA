@@ -186,7 +186,7 @@ python get_accuracies.py --fn-preds path/to/preds.csv
 - [x] Add pretrained models to package
 - [x] Generalize matching to be able to use different lexicons etc. Rewrite README on matching
 - [ ] License: Specifically for RA and ResNet, where code taken elsewhere. Also for datasets
-- [ ] Reformat US census labels to remove spaces
+- [x] Reformat US census labels to remove spaces
 
 ## Citing
 
