@@ -187,6 +187,7 @@ python get_accuracies.py --fn-preds path/to/preds.csv
 - [x] Generalize matching to be able to use different lexicons etc. Rewrite README on matching
 - [ ] License: Specifically for RA and ResNet, where code taken elsewhere. Also for datasets
 - [x] Reformat US census labels to remove spaces
+- [ ] Make sure lexicons up to date
 
 ## Citing
 
