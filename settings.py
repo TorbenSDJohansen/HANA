@@ -175,6 +175,7 @@ SETTINGS = {
             'resnet50-multi-branch': {
                 **MODEL_DEFAULT_INFO,
                 'output_sizes': [MISSING_INDICATOR + 1] * MAX_INDIVIDUAL_NAME_LEN,
+                'learning_rate': 0.2,
                 },
             },
         },
