@@ -188,6 +188,7 @@ python get_accuracies.py --fn-preds path/to/preds.csv
 - [ ] License: Specifically for RA and ResNet, where code taken elsewhere. Also for datasets
 - [x] Reformat US census labels to remove spaces
 - [ ] Make sure lexicons up to date
+- [ ] Where to share model weights?
 
 ## Citing
 
