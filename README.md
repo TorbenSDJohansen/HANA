@@ -9,6 +9,8 @@ Code related to the paper HANA: A HAndwritten NAme Database for Offline Handwrit
 
 ## Download Database
 
+The database can be downloaded from [Kaggle](https://www.kaggle.com/sdusimonwittrock/hana-database)
+
 ## Replicate Results
 
 To replicate our results, follow the steps in the sections below.
