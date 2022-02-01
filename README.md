@@ -1,7 +1,8 @@
 # HANA
-Code related to the paper HANA: A HAndwritten NAme Database for Offline Handwritten Text Recognition.
+This repository contains the code related to the paper [HANA: A HAndwritten NAme Database for Offline Handwritten Text Recognition](https://arxiv.org/abs/2101.10862) by Christian M. Dahl, Torben Johansen, Emil N. Sørensen, and Simon Wittrock.
 
 - [Download Database](#download-database)
+- [Clone Repository and Prepare Environment](#clone-repository-and-prepare-environment)
 - [Replicate Results](#replicate-results)
 - [Replicate Transfer Learning Results](#replicate-transfer-learning-results)
 - [TODO](#todo)
@@ -9,7 +10,23 @@ Code related to the paper HANA: A HAndwritten NAme Database for Offline Handwrit
 
 ## Download Database
 
-The database can be downloaded from [Kaggle](https://www.kaggle.com/sdusimonwittrock/hana-database)
+The database can be downloaded from [Kaggle](https://www.kaggle.com/sdusimonwittrock/hana-database).
+
+## Clone Repository and Prepare Environment
+
+To get started, first clone the repository locally:
+```
+git clone https://github.com/TorbenSDJohansen/HANA.git
+```
+
+Then prepare an environment (here using conda and the name HANA):
+```
+conda create -n HANA numpy pandas pillow scikit-learn tensorboard
+conda activate HANA
+conda install pytorch=1.9 torchvision=0.10 torchaudio cudatoolkit=10.2 -c pytorch
+```
+
+https://www.dropbox.com/sh/uuge71gq1h10qrm/AAA0xulWYgHmxy8SPkLV4VeGa?dl=0
 
 ## Replicate Results
 
@@ -18,19 +35,6 @@ Note the following abbreviations used below:
 1. `DATADIR`: This is the directory where you store the HANA database.
 2. `ROOT`: This is the directory where you save a model and its output. Each neural network should have its own `ROOT`.
 
-### Clone Repository and Prepare Environment
-
-To get started, first clone the repository locally:
-```
-git clone https://github.com/TorbenSDJohansen/HANA.git
-```
-
-Then prepare an environment (here using conda and naming the envionment HANA):
-```
-conda create -n HANA numpy pandas pillow scikit-learn tensorboard
-conda activate HANA
-conda install pytorch=1.9 torchvision=0.10 torchaudio cudatoolkit=10.2 -c pytorch
-```
 
 ### Train Neural Networks
 To train the neural network transcribing only last names, use the command:
