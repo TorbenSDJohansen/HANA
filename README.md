@@ -364,8 +364,6 @@ In those directories, the license under which the library is licensed is include
 1. **RandAugment**: Originates from [pytorch-randaugment](https://github.com/ildoonet/pytorch-randaugment) and located in [networks/augment/pytorch_randaugment](networks/augment/pytorch_randaugment).
 1. **ResNet**: Originates from [torchvision](https://github.com/pytorch/vision) and located in [networks/util/torchvision](networks/util/torchvision).
 
-Note that 
-
 ## Citing
 If you would like to cite our work, please use:
 ```bibtex
