@@ -26,7 +26,29 @@ conda activate HANA
 conda install pytorch=1.9 torchvision=0.10 torchaudio cudatoolkit=10.2 -c pytorch
 ```
 
-https://www.dropbox.com/sh/uuge71gq1h10qrm/AAA0xulWYgHmxy8SPkLV4VeGa?dl=0
+### Model Zoo
+
+<details>
+
+<summary>
+Table with model URLs
+</summary>
+
+| name                      | acc@hana-last-name    | acc@hana-first-and-last-name  | acc@hana-full-name    | acc@danish-census-last-name   | acc@us-census-last-name   | url |
+| ---                       | ---                   | ---                           | ---                   | ---                           | ---                       | --- |
+| hana-last-name            | XXX                   | XXX                           | XXX                   | XXX                           | XXX                       | [model](https://www.dropbox.com/s/vwba88pta7qc2qr/hana-last-name.pt?dl=1) |
+| hana-first-and-last-name  | XXX                   | XXX                           | XXX                   | XXX                           | XXX                       | [model](https://www.dropbox.com/s/1zbfd7l3bkdg662/hana-first-and-last-name.pt?dl=1) |
+| hana-full-name            | XXX                   | XXX                           | XXX                   | XXX                           | XXX                       | [model](https://www.dropbox.com/s/jj32kp5sy6bdmoh/hana-full-name.pt?dl=1) |
+| danish-census-large       | XXX                   | XXX                           | XXX                   | XXX                           | XXX                       | [model](https://www.dropbox.com/s/bcobjqiolvcdte6/danish-census-large-last-name.pt?dl=1) |
+| danish-census-large-tl    | XXX                   | XXX                           | XXX                   | XXX                           | XXX                       | [model](https://www.dropbox.com/s/rbd6ibyrnjqycgs/danish-census-large-last-name-tl.pt?dl=1) |
+| danish-census-small       | XXX                   | XXX                           | XXX                   | XXX                           | XXX                       | [model](https://www.dropbox.com/s/i2jjk905vrcc4op/danish-census-small-last-name.pt?dl=1) |
+| danish-census-small-tl    | XXX                   | XXX                           | XXX                   | XXX                           | XXX                       | [model](https://www.dropbox.com/s/2v8g1lb0rhrjx6z/danish-census-small-last-name-tl.pt?dl=1) |
+| us-census-large           | XXX                   | XXX                           | XXX                   | XXX                           | XXX                       | [model](https://www.dropbox.com/s/t5bvr6oh27p4wcs/us-census-large-last-name.pt?dl=1) |
+| us-census-large-tl        | XXX                   | XXX                           | XXX                   | XXX                           | XXX                       | [model](https://www.dropbox.com/s/mb73ce9wgqf4er6/us-census-large-last-name-tl.pt?dl=1) |
+| us-census-small           | XXX                   | XXX                           | XXX                   | XXX                           | XXX                       | [model](https://www.dropbox.com/s/2u4nfrkb0wof017/us-census-small-last-name.pt?dl=1) |
+| us-census-small-tl        | XXX                   | XXX                           | XXX                   | XXX                           | XXX                       | [model](https://www.dropbox.com/s/nvtmvih13ttac9a/us-census-small-last-name-tl.pt?dl=1) |
+
+</details>
 
 ## Replicate Results
 
@@ -190,6 +212,7 @@ python get_accuracies.py --fn-preds path/to/preds.csv
 - [x] Reformat US census labels to remove spaces
 - [x] Make sure lexicons up to date
 - [ ] Where to share model weights? Test if possible to use Dropbox
+- [ ] Model Zoo section?
 
 ## Citing
 
