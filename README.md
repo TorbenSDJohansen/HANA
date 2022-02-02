@@ -4,9 +4,9 @@ This repository contains the code related to the paper [HANA: A HAndwritten NAme
 - [Download Database](#download-database)
 - [Clone Repository and Prepare Environment](#clone-repository-and-prepare-environment)
 - [Replicate Results](#replicate-results)
-- [Replicate Transfer Learning Results](#replicate-transfer-learning-results)
-- [TODO](#todo)
+- [License](#license)
 - [Citing](#citing)
+- [TODO](#todo)
 
 ## Download Database
 
@@ -52,14 +52,153 @@ Table with model URLs
 
 ## Replicate Results
 
-To replicate our results, follow the steps in the sections below.
-Note the following abbreviations used below:
-1. `DATADIR`: This is the directory where you store the HANA database.
-2. `ROOT`: This is the directory where you save a model and its output. Each neural network should have its own `ROOT`.
+To replicate our results, follow the steps in the following sections.
+Note the following abbreviations used:
+1. `DATADIR`: This is the directory where you store the data (images, labels, lexicons). This vaires between datasets, i.e. the `DATADIR` for the HANA database is different from the one for the Danish census, which itself comes in both a small and a large version.
+2. `ROOT`: This is the directory where you store a model and its output (such as predictions). Each neural network should have its own `ROOT`.
 
+### Evaluation
 
-### Train Neural Networks
-To train the neural network transcribing only last names, use the command:
+To evaluate the pre-trained hana-last-name model on the hana-last-name data (having downloaded the HANA database to the folder `DATADIR` and storing the model's output in the folder `ROOT`):
+```
+python evaluate.py --settings hana-last-name --root ROOT --datadir DATADIR --model-from-url https://www.dropbox.com/s/vwba88pta7qc2qr/hana-last-name.pt?dl=1
+```
+This will write two files to `ROOT`:
+1. `eval_results.pkl`: Contains accuracy and number of test observations.
+2. `preds.csv`: Four-column data frame with (filename, labels, predictions, probability) as columns.
+
+To further use matching:
+```
+python matching.py --root ROOT --fn-lex-last DATADIR/labels/lexicon/last_names.csv
+```
+This will write two files to `ROOT`:
+1. `eval_results_matched.pkl`: Extends `eval_results.pkl` to include accuracy with matching and number of matches made.
+2. `preds_matched.csv`: Extends `preds.csv` to include a column of predictions using matching.
+
+To obtain word acccuracy rates and word accuracy rates at a specified level of coverage:
+```
+python get_accuracies.py --fn-preds ROOT/preds_matched.csv
+```
+This will print the overall word accuracy and the word accuracy at 90% coverage.
+
+#### Remaining models on HANA database
+<detail>
+<summary>
+hana-first-and-last-name model on hana-first-and-last-name
+</summary>
+```
+python evaluate.py --settings hana-first-and-last-name --root ROOT --datadir DATADIR --model-from-url https://www.dropbox.com/s/1zbfd7l3bkdg662/hana-first-and-last-name.pt?dl=1
+python matching.py --root ROOT --fn-lex-first DATADIR/labels/lexicon/first_names.csv --fn-lex-last DATADIR/labels/lexicon/last_names.csv
+python get_accuracies.py --fn-preds ROOT/preds_matched.csv
+```
+</details>
+
+<detail>
+<summary>
+hana-full-name model on hana-full-name
+</summary>
+```
+python evaluate.py --settings hana-full-name --root ROOT --datadir DATADIR --model-from-url https://www.dropbox.com/s/jj32kp5sy6bdmoh/hana-full-name.pt?dl=1
+python matching.py --root ROOT --fn-lex-first DATADIR/labels/lexicon/first_names.csv --fn-lex-middle DATADIR/labels/lexicon/middle_names.csv --fn-lex-last DATADIR/labels/lexicon/last_names.csv
+python get_accuracies.py --fn-preds ROOT/preds_matched.csv
+```
+</details>
+
+#### Danish census
+<detail>
+<summary>
+(large subset) danish-census model on danish-census-last-name
+</summary>
+```
+python evaluate.py --settings danish-census-large-last-name --root ROOT --datadir DATADIR --model-from-url https://www.dropbox.com/s/bcobjqiolvcdte6/danish-census-large-last-name.pt?dl=1
+python matching.py --root ROOT --fn-lex-last DATADIR/labels/lexicon/last_names.csv
+python get_accuracies.py --fn-preds ROOT/preds_matched.csv
+```
+</details>
+
+<detail>
+<summary>
+(large subset) danish-census model w/ TL on danish-census-last-name
+</summary>
+```
+python evaluate.py --settings danish-census-large-last-name-tl --root ROOT --datadir DATADIR --model-from-url https://www.dropbox.com/s/rbd6ibyrnjqycgs/danish-census-large-last-name-tl.pt?dl=1
+python matching.py --root ROOT --fn-lex-last DATADIR/labels/lexicon/last_names.csv
+python get_accuracies.py --fn-preds ROOT/preds_matched.csv
+```
+</details>
+
+<detail>
+<summary>
+(small subset) danish-census model on danish-census-last-name
+</summary>
+```
+python evaluate.py --settings danish-census-small-last-name --root ROOT --datadir DATADIR --model-from-url https://www.dropbox.com/s/i2jjk905vrcc4op/danish-census-small-last-name.pt?dl=1
+python matching.py --root ROOT --fn-lex-last DATADIR/labels/lexicon/last_names.csv
+python get_accuracies.py --fn-preds ROOT/preds_matched.csv
+```
+</details>
+
+<detail>
+<summary>
+(small subset) danish-census model w/ TL on danish-census-last-name
+</summary>
+```
+python evaluate.py --settings danish-census-small-last-name-tl --root ROOT --datadir DATADIR --model-from-url https://www.dropbox.com/s/2v8g1lb0rhrjx6z/danish-census-small-last-name-tl.pt?dl=1
+python matching.py --root ROOT --fn-lex-last DATADIR/labels/lexicon/last_names.csv
+python get_accuracies.py --fn-preds ROOT/preds_matched.csv
+```
+</details>
+
+#### US census
+<detail>
+<summary>
+(large subset) us-census model on us-census-last-name
+</summary>
+```
+python evaluate.py --settings US-census-large-last-name --root ROOT --datadir DATADIR --model-from-url https://www.dropbox.com/s/t5bvr6oh27p4wcs/us-census-large-last-name.pt?dl=1
+python matching.py --root ROOT --fn-lex-last DATADIR/labels/lexicon/last_names.csv
+python get_accuracies.py --fn-preds ROOT/preds_matched.csv
+```
+</details>
+
+<detail>
+<summary>
+(large subset) us-census model w/ TL on us-census-last-name
+</summary>
+```
+python evaluate.py --settings US-census-large-last-name-tl --root ROOT --datadir DATADIR --model-from-url https://www.dropbox.com/s/mb73ce9wgqf4er6/us-census-large-last-name-tl.pt?dl=1
+python matching.py --root ROOT --fn-lex-last DATADIR/labels/lexicon/last_names.csv
+python get_accuracies.py --fn-preds ROOT/preds_matched.csv
+```
+</details>
+
+<detail>
+<summary>
+(small subset) us-census model on us-census-last-name
+</summary>
+```
+python evaluate.py --settings US-census-small-last-name --root ROOT --datadir DATADIR --model-from-url https://www.dropbox.com/s/2u4nfrkb0wof017/us-census-small-last-name.pt?dl=1
+python matching.py --root ROOT --fn-lex-last DATADIR/labels/lexicon/last_names.csv
+python get_accuracies.py --fn-preds ROOT/preds_matched.csv
+```
+</details>
+
+<detail>
+<summary>
+(small subset) us-census model w/ TL on us-census-last-name
+</summary>
+```
+python evaluate.py --settings US-census-small-last-name-tl --root ROOT --datadir DATADIR --model-from-url https://www.dropbox.com/s/nvtmvih13ttac9a/us-census-small-last-name-tl.pt?dl=1
+python matching.py --root ROOT --fn-lex-last DATADIR/labels/lexicon/last_names.csv
+python get_accuracies.py --fn-preds ROOT/preds_matched.csv
+```
+</details>
+
+### Training
+
+**TODO**: Implement --fn-pretrained from URL as well!
+
+To train the model on the hana-last-name data (having downloaded the HANA database to the folder `DATADIR` and storing the model and logs in the folder `ROOT`):
 ```
 python train.py --settings ln --root ROOT --datadir DATADIR
 ```
@@ -67,156 +206,105 @@ This will train a neural network in `ROOT/logs/resnet50-multi-branch/` and log t
 Five percent of the training data will be used for the purpose of logging validation performance.
 To follow training using tensorboard, use the command `tensorboard --port 1234 --logdir ROOT` and visit `localhost:1234`.
 
-To train the network transcribing first and last names:
+<detail>
+<summary>
+hana-first-and-last-name model
+</summary>
 ```
-python train.py --settings fln --root ROOT --datadir DATADIR
+python train.py --settings hana-first-and-last-name --root ROOT --datadir DATADIR
 ```
+</details>
 
-To train the network transcribing first, middle, and last names:
+<detail>
+<summary>
+hana-full-name model
+</summary>
 ```
-python train.py --settings fn --root ROOT --datadir DATADIR
+python train.py --settings full-name --root ROOT --datadir DATADIR
 ```
+</details>
 
-### Predict/Evaluate
-To evaluate a trained model on the test set, and obtain predictions on all samples in the test set, first make sure to have a trained model in `ROOT`.
-Then use the command below for the network transcribing only last names:
+#### Danish census
+<detail>
+<summary>
+(large subset) danish-census model
+</summary>
 ```
-python evaluate.py --settings ln --root ROOT --datadir DATADIR
+python train.py --settings danish-census-large-last-name --root ROOT --datadir DATADIR
 ```
-This will write two files to `ROOT`:
-1. `eval_results.pkl`: Contains accuracy and number of test observations.
-2. `preds.csv`: Four-column data frame with (filename, labels, predictions, probability) as columns.
+</details>
 
-For the network transcribing first and last names:
+<detail>
+<summary>
+(large subset) danish-census model w/ TL
+</summary>
 ```
-python evaluate.py --settings fln --root ROOT --datadir DATADIR
+python train.py --settings danish-census-large-last-name-tl --root ROOT --datadir DATADIR --url-pretrained https://www.dropbox.com/s/vwba88pta7qc2qr/hana-last-name.pt?dl=1
 ```
+</details>
 
-For the network transcribing first, middle, and last names:
+<detail>
+<summary>
+(small subset) danish-census model
+</summary>
 ```
-python evaluate.py --settings fn --root ROOT --datadir DATADIR
+python train.py --settings danish-census-small-last-name --root ROOT --datadir DATADIR
 ```
+</details>
 
-#### Without Training A Model
-If you have not trained a model yourself, you can use those provided when you downloaded the database.
-This way you can exactly replicate the numbers from the paper.
-The pretrained models are located in `DATADIR/pretrained` and are:
-1. `fln`: The network transcribing first and last names.
-2. `fn`: The network transcribing first, middle, and last names.
-3. `ln`: The network transcribing last names.
+<detail>
+<summary>
+(small subset) danish-census model w/ TL
+</summary>
+```
+python train.py --settings danish-census-small-last-name-tl --root ROOT --datadir DATADIR --url-pretrained https://www.dropbox.com/s/vwba88pta7qc2qr/hana-last-name.pt?dl=1
+```
+</details>
 
-To use, e.g., the model `ln`, you can either copy/paste the folder `DATADIR/pretrained/ln` to somewhere else and use that new location as `ROOT` or you can specify `ROOT` as `DATADIR/pretrained/ln` directly.
+#### US census
+<detail>
+<summary>
+(large subset) us-census model on us-census-last-name
+</summary>
+```
+python train.py --settings US-census-large-last-name --root ROOT --datadir DATADIR
+```
+</details>
 
-### Perform Matching
-To perform matching, first make sure to have a file with predictions.
-Then, use appropriate lexicons to match the predictions to.
-For the network transcribing last names, use the command:
+<detail>
+<summary>
+(large subset) us-census model on us-census-last-name w/ TL
+</summary>
 ```
-python matching.py --root ROOT --fn-lex-last DATADIR/last_names.npy
+python train.py --settings US-census-large-last-name-tl --root ROOT --datadir DATADIR --url-pretrained https://www.dropbox.com/s/vwba88pta7qc2qr/hana-last-name.pt?dl=1
 ```
-This will then write two files to `ROOT`:
-1. `eval_results_matched.pkl`: Extends `eval_results.pkl` to include accuracy with matching and number of matches made.
-2. `preds_matched.csv`: Extends `preds.csv` to include a column of predictions using matching.
+</details>
 
-For the network transcribing first and last names:
+<detail>
+<summary>
+(small subset) us-census model on us-census-last-name
+</summary>
 ```
-python matching.py --root ROOT --fn-lex-last DATADIR/last_names.npy --fn-lex-first DATADIR/first_names.npy
+python train.py --settings US-census-small-last-name --root ROOT --datadir DATADIR
 ```
+</details>
 
-For the network transcribing first, middle, and last names:
+<detail>
+<summary>
+(small subset) us-census model on us-census-last-name w/ TL
+</summary>
 ```
-python matching.py --root ROOT --fn-lex-last DATADIR/last_names.npy --fn-lex-first DATADIR/first_names.npy --fn-lex-middle DATADIR/middle_names.npy
+python train.py --settings US-census-small-last-name-tl --root ROOT --datadir DATADIR --url-pretrained https://www.dropbox.com/s/vwba88pta7qc2qr/hana-last-name.pt?dl=1
 ```
+</details>
 
-**Note**: If you provided arguments for `--fn-preds` and `--fn-results` when evaluating/predicting, you must also provide those here.
-In that case, you do not need to provide an argument for `--root`.
+## License
 
-### Calculate Word Accuracies
-To obtain word acccuracy rates and word accuracy rates at a specified level of coverage, first make sure to have a file with predictions.
-Suppose this file is called `path/to/preds.csv`.
-Then use the command:
-```
-python get_accuracies.py --fn-preds path/to/preds.csv
-```
-This will print the overall word accuracy and the accuracy at 90% coverage.
+Our code is licensed under Apache 2.0 (see [LICENSE](LICENSE)).
 
-If you provide a file with predictions that also includes predictions using matching, the word accuracy when using matching will also be printed.
-
-To use a different level of coverage, you can specify it using the command `--coverage`.
-
-## Replicate Transfer Learning Results
-Replicating our transfer learning results mostly follow from replicating our other results; make sure to read those sections first.
-Suppose you are transfer learning from a model `path/to/tl-model.pt`.
-
-### Train Neural Networks
-To train the model on the small sample of the Danish census data, use the command:
-```
-python train.py --settings ln-danish-census-small-tl --root ROOT --datadir DATADIR --fn-pretrained path/to/tl-model.pt
-```
-To train the model on the same data but not transfer learning from one of the HANA models, use the command:
-```
-python train.py --settings ln-danish-census-small --root ROOT --datadir DATADIR
-```
-
-To train the models (with and without transfer learning from the HANA database, respectively) on the large sample of the Danish census data, use the commands:
-```
-python train.py --settings ln-danish-census-large-tl --root ROOT --datadir DATADIR --fn-pretrained path/to/tl-model.pt
-python train.py --settings ln-danish-census-large --root ROOT --datadir DATADIR
-```
-
-If you have not trained a model to transfer learn from yourself, you can use those provided when you downloaded the database.
-That is, you can specify `--fn-pretrained DATADIR/pretrained/ln/logs/resnet50-multi-branch/model_389700.pt`.
-
-### Predict/Evaluate
-Evaluating a model and obtaining predictions on the test set of the Danish census data is similar to what has previously been described.
-For the transfer learning model on the small sample of the Danish census data, use the command:
-```
-python evaluate.py --settings ln-danish-census-small-tl --root ROOT --datadir DATADIR
-```
-
-For the model without transfer learning from the HANA database on the small sample of the Danish census data, the model transfer learning on the large sample, and the model not transfer learning on the large sample, respectively, use the commands:
-```
-python evaluate.py --settings ln-danish-census-small --root ROOT --datadir DATADIR
-python evaluate.py --settings ln-danish-census-large-tl --root ROOT --datadir DATADIR
-python evaluate.py --settings ln-danish-census-large --root ROOT --datadir DATADIR
-```
-
-#### Without Training A Model
-If you have not trained a model yourself, you can use those provided when you downloaded the database; this is done in the same way as described above.
-This way you can exactly replicate the numbers from the paper.
-The pretrained models are located in `DATADIR/pretrained` and are:
-**TODO**
-1. `ln-danish-census-large`
-2. `ln-danish-census-large-tl`
-3. `ln-danish-census-small`
-4. `ln-danish-census-small-tl`
-
-To use, e.g., the model `ln-danish-census-large-tl`, you can either copy/paste the folder `DATADIR/pretrained/ln-danish-census-large-tl` to somewhere else and use that new location as `ROOT` or you can specify `ROOT` as `DATADIR/pretrained/ln-danish-census-large-tl` directly.
-
-### Matching and Calculating Word Accuracies
-The remaining steps are identical to what has previously been described:
-```
-python matching.py --root ROOT --fn-lex-last DATADIR/danish-census/last_names.npy
-python get_accuracies.py --fn-preds path/to/preds.csv
-```
-
-## TODO
-- [ ] How to download database
-- [x] How to prepare environment, including which packages are needed
-- [x] Resuming training
-- [x] Transfer learning
-- [x] Is recall the right word to use? In paper and in code
-- [ ] Link to paper
-- [x] Generalize matching to be able to use different lexicons etc. Rewrite README on matching
-- [ ] License: Specifically for RA and ResNet, where code taken elsewhere. Method: Subfolder for each file, add license to that folder (i.e. folder will contain a license and one .py file). Fix imports. Then, in README.md, refer (for each) to 1) folder and 2) repo.
-- [x] Reformat US census labels to remove spaces
-- [x] Make sure lexicons up to date
-- [ ] Where to share model weights? Test if possible to use Dropbox
-- [ ] Model Zoo section?
 
 ## Citing
-
-### BibTeX
+If you would like to cite our work, please use:
 ```bibtex
 @article{tsdj2022hana,
   author = {XXX},
@@ -225,3 +313,17 @@ python get_accuracies.py --fn-preds path/to/preds.csv
   journal = {XXX},
 }
 ```
+
+## TODO
+- [x] How to download database
+- [x] How to prepare environment, including which packages are needed
+- [x] Resuming training
+- [x] Transfer learning
+- [x] Is recall the right word to use? In paper and in code
+- [x] Link to paper
+- [x] Generalize matching to be able to use different lexicons etc. Rewrite README on matching
+- [ ] License: Specifically for RA and ResNet, where code taken elsewhere. Method: Subfolder for each file, add license to that folder (i.e. folder will contain a license and one .py file). Fix imports. Then, in README.md, refer (for each) to 1) folder and 2) repo.
+- [x] Reformat US census labels to remove spaces
+- [x] Make sure lexicons up to date
+- [x] Where to share model weights? Test if possible to use Dropbox
+- [x] Model Zoo section?
