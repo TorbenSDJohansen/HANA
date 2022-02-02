@@ -8,7 +8,7 @@ import torch
 from torch import nn
 
 from networks.util.setup_functions import get_model_file
-from networks.util import resnet
+from networks.util.torchvision import resnet
 from networks.util.pytorch_modules import SequenceEstimator
 
 

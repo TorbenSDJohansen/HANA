@@ -17,7 +17,7 @@ from torchvision import transforms
 import numpy as np
 
 from networks.constructor import SequenceNet
-from networks.augment.rand_augment import RandAugment
+from networks.augment.pytorch_randaugment.rand_augment import RandAugment
 from networks.augment.augmenters import to_col, ResizePad
 
 

@@ -358,7 +358,13 @@ python train.py --settings US-census-small-last-name-tl --root ROOT --datadir DA
 ## License
 
 Our code is licensed under Apache 2.0 (see [LICENSE](LICENSE)).
+Part of the code used originates from two other libraries.
+To make explicit what originates from elsewhere, those parts are located in their own directories (in a modified form and only the part used in this project).
+In those directories, the license under which the library is licensed is included.
+1. **RandAugment**: Originates from [pytorch-randaugment](https://github.com/ildoonet/pytorch-randaugment) and located in [networks/augment/pytorch_randaugment](networks/augment/pytorch_randaugment).
+1. **ResNet**: Originates from [torchvision](https://github.com/pytorch/vision) and located in [networks/util/torchvision](networks/util/torchvision).
 
+Note that 
 
 ## Citing
 If you would like to cite our work, please use:
@@ -384,3 +390,4 @@ If you would like to cite our work, please use:
 - [x] Make sure lexicons up to date
 - [x] Where to share model weights? Test if possible to use Dropbox
 - [x] Model Zoo section?
+- [ ] Accuracy for model zoo
