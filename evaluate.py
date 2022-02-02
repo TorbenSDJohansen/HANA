@@ -48,7 +48,8 @@ def evaluate(
     device : torch.device
         Controls whether GPU or CPU is used.
     root: str.
-        Directory where the models are loaded from.
+        Directory where the models are loaded from. If model_info contains URL
+        to model weights, the weights will be loaded from there instead.
     fn_results : str, optional
         Name used to save the results (models used, number of observation
         evaluated on, and accuracy). The default is None, in which case the
@@ -119,13 +120,14 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Evaluation')
 
     parser.add_argument('--settings', type=str, choices=SETTINGS.keys())
-    parser.add_argument('--root', type=str)
     parser.add_argument('--datadir', type=str)
+    parser.add_argument('--root', type=str, default=None)
     parser.add_argument('--fn-results', type=str, default=None)
     parser.add_argument('--fn-preds', type=str, default=None)
     parser.add_argument('--batch-size', type=int, default=1024)
     parser.add_argument('--debug', type=int, default=None, help='Keep only specified number of obs. for debugging.')
     parser.add_argument('--custom-name', type=str, default=None)
+    parser.add_argument('--model-from-url', type=str, default=None, help='Load model weights from URL.')
 
     args = parser.parse_args()
 
@@ -139,6 +141,10 @@ def main():
     root = args.root
     fn_results = args.fn_results
     fn_preds = args.fn_preds
+
+    if args.root is None:
+        for _required in (args.model_from_url, args.fn_results, args.fn_preds):
+            assert _required is not None, 'if root not specified, must specify model url and name of output files'
 
     if fn_results is None:
         fn_results = os.path.join(root, 'eval_results.pkl')
@@ -156,6 +162,9 @@ def main():
     data_info['batch_size'] = args.batch_size
 
     model_name = list(model_info.keys())[0]
+
+    if args.model_from_url is not None:
+        model_info[model_name]['url'] = args.model_from_url
 
     if args.custom_name is not None:
         model_info[args.custom_name] = model_info.pop(model_name)

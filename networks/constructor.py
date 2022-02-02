@@ -91,7 +91,7 @@ class SequenceNet(nn.Module):
             pretrained: bool = True,
             input_transform: str = None,
         ):
-        super(SequenceNet, self).__init__()
+        super().__init__()
 
         self.input_transform = _build_input_transform(input_transform)
         self.feature_extractor, out_nodes = _build_feature_extractor(
@@ -114,7 +114,12 @@ def _load_model(model_name: str, root: str, info: dict, device: torch.device): #
         classifier=info['classifier'],
         output_sizes=info['output_sizes'],
         ).to(device)
-    model.load_state_dict(torch.load(get_model_file(root, model_name)))
+
+    if 'url' in info:
+        model.load_state_dict(torch.hub.load_state_dict_from_url(info['url']))
+    else:
+        model.load_state_dict(torch.load(get_model_file(root, model_name)))
+
     model.eval()
 
     return model
@@ -132,7 +137,8 @@ def load_models(model_info: dict, root: str, device: torch.device) -> dict: # py
         construct them.
     root : str
         The directory in which the models are saved (they will be in the sub-
-        folder "./logs/").
+        folder "./logs/"). If model_info contains URL to model weights, the
+        weights will be loaded from there instead.
     device : torch.device
         The device (CPU/GPU) on which to load the models.
 
