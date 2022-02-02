@@ -318,6 +318,8 @@ def _setup_model_optimizer(
 
     if 'fn_pretrained' in info.keys():
         model.load_state_dict(torch.load(info['fn_pretrained']), strict=False)
+    if 'url' in info:
+        model.load_state_dict(torch.hub.load_state_dict_from_url(info['url']))
 
     if 'to_freeze' in info.keys():
         for layer in info['to_freeze']:

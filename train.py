@@ -109,6 +109,7 @@ def parse_args():
     parser.add_argument('--datadir', type=str)
     parser.add_argument('--batch-size', type=int, default=None)
     parser.add_argument('--fn-pretrained', type=str, default=None)
+    parser.add_argument('--url-pretrained', type=str, default=None)
     parser.add_argument('--debug', type=int, default=None, help='Keep only specified number of obs. for debugging.')
     parser.add_argument('--lr', type=float, default=None)
     parser.add_argument('--custom-name', type=str, default=None)
@@ -142,8 +143,13 @@ def main():
         model_name = args.custom_name
 
     if args.fn_pretrained is not None:
+        assert args.url_pretrained is None, 'cannot request pretrained model from file AND url'
         print(f'Starting training from pretrained model {args.fn_pretrained}.')
         model_info[model_name]['fn_pretrained'] = args.fn_pretrained
+
+    if args.url_pretrained is not None:
+        print(f'Starting training from pretrained model {args.url_pretrained}.')
+        model_info[model_name]['url'] = args.url_pretrained
 
     if args.lr is not None:
         print(f'Using custom learning rate: {args.lr}.')
