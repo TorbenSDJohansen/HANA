@@ -97,104 +97,131 @@ python get_accuracies.py --fn-preds ROOT/preds_matched.csv
 </details>
 
 <details>
+
 <summary>
 hana-full-name model on hana-full-name
 </summary>
+
 ```
 python evaluate.py --settings hana-full-name --root ROOT --datadir DATADIR --model-from-url https://www.dropbox.com/s/jj32kp5sy6bdmoh/hana-full-name.pt?dl=1
 python matching.py --root ROOT --fn-lex-first DATADIR/labels/lexicon/first_names.csv --fn-lex-middle DATADIR/labels/lexicon/middle_names.csv --fn-lex-last DATADIR/labels/lexicon/last_names.csv
 python get_accuracies.py --fn-preds ROOT/preds_matched.csv
 ```
+
 </details>
 
 #### Danish census
 <details>
+
 <summary>
 (large subset) danish-census model on danish-census-last-name
 </summary>
+
 ```
 python evaluate.py --settings danish-census-large-last-name --root ROOT --datadir DATADIR --model-from-url https://www.dropbox.com/s/bcobjqiolvcdte6/danish-census-large-last-name.pt?dl=1
 python matching.py --root ROOT --fn-lex-last DATADIR/labels/lexicon/last_names.csv
 python get_accuracies.py --fn-preds ROOT/preds_matched.csv
 ```
+
 </details>
 
 <details>
+
 <summary>
 (large subset) danish-census model w/ TL on danish-census-last-name
 </summary>
+
 ```
 python evaluate.py --settings danish-census-large-last-name-tl --root ROOT --datadir DATADIR --model-from-url https://www.dropbox.com/s/rbd6ibyrnjqycgs/danish-census-large-last-name-tl.pt?dl=1
 python matching.py --root ROOT --fn-lex-last DATADIR/labels/lexicon/last_names.csv
 python get_accuracies.py --fn-preds ROOT/preds_matched.csv
 ```
+
 </details>
 
 <details>
+
 <summary>
 (small subset) danish-census model on danish-census-last-name
 </summary>
+
 ```
 python evaluate.py --settings danish-census-small-last-name --root ROOT --datadir DATADIR --model-from-url https://www.dropbox.com/s/i2jjk905vrcc4op/danish-census-small-last-name.pt?dl=1
 python matching.py --root ROOT --fn-lex-last DATADIR/labels/lexicon/last_names.csv
 python get_accuracies.py --fn-preds ROOT/preds_matched.csv
 ```
+
 </details>
 
 <details>
+
 <summary>
 (small subset) danish-census model w/ TL on danish-census-last-name
 </summary>
+
 ```
 python evaluate.py --settings danish-census-small-last-name-tl --root ROOT --datadir DATADIR --model-from-url https://www.dropbox.com/s/2v8g1lb0rhrjx6z/danish-census-small-last-name-tl.pt?dl=1
 python matching.py --root ROOT --fn-lex-last DATADIR/labels/lexicon/last_names.csv
 python get_accuracies.py --fn-preds ROOT/preds_matched.csv
 ```
+
 </details>
 
 #### US census
 <details>
+
 <summary>
 (large subset) us-census model on us-census-last-name
 </summary>
+
 ```
 python evaluate.py --settings US-census-large-last-name --root ROOT --datadir DATADIR --model-from-url https://www.dropbox.com/s/t5bvr6oh27p4wcs/us-census-large-last-name.pt?dl=1
 python matching.py --root ROOT --fn-lex-last DATADIR/labels/lexicon/last_names.csv
 python get_accuracies.py --fn-preds ROOT/preds_matched.csv
 ```
+
 </details>
 
 <details>
+
 <summary>
 (large subset) us-census model w/ TL on us-census-last-name
 </summary>
+
 ```
 python evaluate.py --settings US-census-large-last-name-tl --root ROOT --datadir DATADIR --model-from-url https://www.dropbox.com/s/mb73ce9wgqf4er6/us-census-large-last-name-tl.pt?dl=1
 python matching.py --root ROOT --fn-lex-last DATADIR/labels/lexicon/last_names.csv
 python get_accuracies.py --fn-preds ROOT/preds_matched.csv
 ```
+
 </details>
 
 <details>
+
 <summary>
 (small subset) us-census model on us-census-last-name
 </summary>
+
 ```
 python evaluate.py --settings US-census-small-last-name --root ROOT --datadir DATADIR --model-from-url https://www.dropbox.com/s/2u4nfrkb0wof017/us-census-small-last-name.pt?dl=1
 python matching.py --root ROOT --fn-lex-last DATADIR/labels/lexicon/last_names.csv
 python get_accuracies.py --fn-preds ROOT/preds_matched.csv
 ```
+
 </details>
 
 <details>
+
 <summary>
 (small subset) us-census model w/ TL on us-census-last-name
 </summary>
+
 ```
 python evaluate.py --settings US-census-small-last-name-tl --root ROOT --datadir DATADIR --model-from-url https://www.dropbox.com/s/nvtmvih13ttac9a/us-census-small-last-name-tl.pt?dl=1
 python matching.py --root ROOT --fn-lex-last DATADIR/labels/lexicon/last_names.csv
 python get_accuracies.py --fn-preds ROOT/preds_matched.csv
 ```
+
 </details>
 
 ### Training
@@ -207,95 +234,125 @@ Five percent of the training data will be used for the purpose of logging valida
 To follow training using tensorboard, use the command `tensorboard --port 1234 --logdir ROOT` and visit `localhost:1234`.
 
 <details>
+
 <summary>
 hana-first-and-last-name model
 </summary>
+
 ```
 python train.py --settings hana-first-and-last-name --root ROOT --datadir DATADIR
 ```
+
 </details>
 
 <details>
+
 <summary>
 hana-full-name model
 </summary>
+
 ```
 python train.py --settings full-name --root ROOT --datadir DATADIR
 ```
+
 </details>
 
 #### Danish census
 <details>
+
 <summary>
 (large subset) danish-census model
 </summary>
+
 ```
 python train.py --settings danish-census-large-last-name --root ROOT --datadir DATADIR
 ```
+
 </details>
 
 <details>
+
 <summary>
 (large subset) danish-census model w/ TL
 </summary>
+
 ```
 python train.py --settings danish-census-large-last-name-tl --root ROOT --datadir DATADIR --url-pretrained https://www.dropbox.com/s/vwba88pta7qc2qr/hana-last-name.pt?dl=1
 ```
+
 </details>
 
 <details>
+
 <summary>
 (small subset) danish-census model
 </summary>
+
 ```
 python train.py --settings danish-census-small-last-name --root ROOT --datadir DATADIR
 ```
+
 </details>
 
 <details>
+
 <summary>
 (small subset) danish-census model w/ TL
 </summary>
+
 ```
 python train.py --settings danish-census-small-last-name-tl --root ROOT --datadir DATADIR --url-pretrained https://www.dropbox.com/s/vwba88pta7qc2qr/hana-last-name.pt?dl=1
 ```
+
 </details>
 
 #### US census
 <details>
+
 <summary>
 (large subset) us-census model on us-census-last-name
 </summary>
+
 ```
 python train.py --settings US-census-large-last-name --root ROOT --datadir DATADIR
 ```
+
 </details>
 
 <details>
+
 <summary>
 (large subset) us-census model on us-census-last-name w/ TL
 </summary>
+
 ```
 python train.py --settings US-census-large-last-name-tl --root ROOT --datadir DATADIR --url-pretrained https://www.dropbox.com/s/vwba88pta7qc2qr/hana-last-name.pt?dl=1
 ```
+
 </details>
 
 <details>
+
 <summary>
 (small subset) us-census model on us-census-last-name
 </summary>
+
 ```
 python train.py --settings US-census-small-last-name --root ROOT --datadir DATADIR
 ```
+
 </details>
 
 <details>
+
 <summary>
 (small subset) us-census model on us-census-last-name w/ TL
 </summary>
+
 ```
 python train.py --settings US-census-small-last-name-tl --root ROOT --datadir DATADIR --url-pretrained https://www.dropbox.com/s/vwba88pta7qc2qr/hana-last-name.pt?dl=1
 ```
+
 </details>
 
 ## License
