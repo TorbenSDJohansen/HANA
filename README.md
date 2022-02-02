@@ -82,7 +82,7 @@ python get_accuracies.py --fn-preds ROOT/preds_matched.csv
 This will print the overall word accuracy and the word accuracy at 90% coverage.
 
 #### Remaining models on HANA database
-<detail>
+<details>
 <summary>
 hana-first-and-last-name model on hana-first-and-last-name
 </summary>
@@ -93,7 +93,7 @@ python get_accuracies.py --fn-preds ROOT/preds_matched.csv
 ```
 </details>
 
-<detail>
+<details>
 <summary>
 hana-full-name model on hana-full-name
 </summary>
@@ -105,7 +105,7 @@ python get_accuracies.py --fn-preds ROOT/preds_matched.csv
 </details>
 
 #### Danish census
-<detail>
+<details>
 <summary>
 (large subset) danish-census model on danish-census-last-name
 </summary>
@@ -116,7 +116,7 @@ python get_accuracies.py --fn-preds ROOT/preds_matched.csv
 ```
 </details>
 
-<detail>
+<details>
 <summary>
 (large subset) danish-census model w/ TL on danish-census-last-name
 </summary>
@@ -127,7 +127,7 @@ python get_accuracies.py --fn-preds ROOT/preds_matched.csv
 ```
 </details>
 
-<detail>
+<details>
 <summary>
 (small subset) danish-census model on danish-census-last-name
 </summary>
@@ -138,7 +138,7 @@ python get_accuracies.py --fn-preds ROOT/preds_matched.csv
 ```
 </details>
 
-<detail>
+<details>
 <summary>
 (small subset) danish-census model w/ TL on danish-census-last-name
 </summary>
@@ -150,7 +150,7 @@ python get_accuracies.py --fn-preds ROOT/preds_matched.csv
 </details>
 
 #### US census
-<detail>
+<details>
 <summary>
 (large subset) us-census model on us-census-last-name
 </summary>
@@ -161,7 +161,7 @@ python get_accuracies.py --fn-preds ROOT/preds_matched.csv
 ```
 </details>
 
-<detail>
+<details>
 <summary>
 (large subset) us-census model w/ TL on us-census-last-name
 </summary>
@@ -172,7 +172,7 @@ python get_accuracies.py --fn-preds ROOT/preds_matched.csv
 ```
 </details>
 
-<detail>
+<details>
 <summary>
 (small subset) us-census model on us-census-last-name
 </summary>
@@ -183,7 +183,7 @@ python get_accuracies.py --fn-preds ROOT/preds_matched.csv
 ```
 </details>
 
-<detail>
+<details>
 <summary>
 (small subset) us-census model w/ TL on us-census-last-name
 </summary>
@@ -206,7 +206,7 @@ This will train a neural network in `ROOT/logs/resnet50-multi-branch/` and log t
 Five percent of the training data will be used for the purpose of logging validation performance.
 To follow training using tensorboard, use the command `tensorboard --port 1234 --logdir ROOT` and visit `localhost:1234`.
 
-<detail>
+<details>
 <summary>
 hana-first-and-last-name model
 </summary>
@@ -215,7 +215,7 @@ python train.py --settings hana-first-and-last-name --root ROOT --datadir DATADI
 ```
 </details>
 
-<detail>
+<details>
 <summary>
 hana-full-name model
 </summary>
@@ -225,7 +225,7 @@ python train.py --settings full-name --root ROOT --datadir DATADIR
 </details>
 
 #### Danish census
-<detail>
+<details>
 <summary>
 (large subset) danish-census model
 </summary>
@@ -234,7 +234,7 @@ python train.py --settings danish-census-large-last-name --root ROOT --datadir D
 ```
 </details>
 
-<detail>
+<details>
 <summary>
 (large subset) danish-census model w/ TL
 </summary>
@@ -243,7 +243,7 @@ python train.py --settings danish-census-large-last-name-tl --root ROOT --datadi
 ```
 </details>
 
-<detail>
+<details>
 <summary>
 (small subset) danish-census model
 </summary>
@@ -252,7 +252,7 @@ python train.py --settings danish-census-small-last-name --root ROOT --datadir D
 ```
 </details>
 
-<detail>
+<details>
 <summary>
 (small subset) danish-census model w/ TL
 </summary>
@@ -262,7 +262,7 @@ python train.py --settings danish-census-small-last-name-tl --root ROOT --datadi
 </details>
 
 #### US census
-<detail>
+<details>
 <summary>
 (large subset) us-census model on us-census-last-name
 </summary>
@@ -271,7 +271,7 @@ python train.py --settings US-census-large-last-name --root ROOT --datadir DATAD
 ```
 </details>
 
-<detail>
+<details>
 <summary>
 (large subset) us-census model on us-census-last-name w/ TL
 </summary>
@@ -280,7 +280,7 @@ python train.py --settings US-census-large-last-name-tl --root ROOT --datadir DA
 ```
 </details>
 
-<detail>
+<details>
 <summary>
 (small subset) us-census model on us-census-last-name
 </summary>
@@ -289,7 +289,7 @@ python train.py --settings US-census-small-last-name --root ROOT --datadir DATAD
 ```
 </details>
 
-<detail>
+<details>
 <summary>
 (small subset) us-census model on us-census-last-name w/ TL
 </summary>
