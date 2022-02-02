@@ -83,14 +83,17 @@ This will print the overall word accuracy and the word accuracy at 90% coverage.
 
 #### Remaining models on HANA database
 <details>
+
 <summary>
 hana-first-and-last-name model on hana-first-and-last-name
 </summary>
+
 ```
 python evaluate.py --settings hana-first-and-last-name --root ROOT --datadir DATADIR --model-from-url https://www.dropbox.com/s/1zbfd7l3bkdg662/hana-first-and-last-name.pt?dl=1
 python matching.py --root ROOT --fn-lex-first DATADIR/labels/lexicon/first_names.csv --fn-lex-last DATADIR/labels/lexicon/last_names.csv
 python get_accuracies.py --fn-preds ROOT/preds_matched.csv
 ```
+
 </details>
 
 <details>
@@ -195,9 +198,6 @@ python get_accuracies.py --fn-preds ROOT/preds_matched.csv
 </details>
 
 ### Training
-
-**TODO**: Implement --fn-pretrained from URL as well!
-
 To train the model on the hana-last-name data (having downloaded the HANA database to the folder `DATADIR` and storing the model and logs in the folder `ROOT`):
 ```
 python train.py --settings ln --root ROOT --datadir DATADIR
