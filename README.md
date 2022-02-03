@@ -54,7 +54,7 @@ Table with model URLs
 
 To replicate our results, follow the steps in the following sections.
 Note the following abbreviations used:
-1. `DATADIR`: This is the directory where you store the data (images, labels, lexicons). This vaires between datasets, i.e. the `DATADIR` for the HANA database is different from the one for the Danish census, which itself comes in both a small and a large version.
+1. `DATADIR`: This is the directory where you store the data (images, labels, lexicons). This varies between datasets, i.e. the `DATADIR` for the HANA database is different from the one for the Danish census, which itself comes in both a small and a large version.
 2. `ROOT`: This is the directory where you store a model and its output (such as predictions). Each neural network should have its own `ROOT`.
 
 ### Evaluation
