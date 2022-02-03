@@ -59,7 +59,7 @@ Note the following abbreviations used:
 
 ### Evaluation
 
-To evaluate the pre-trained hana-last-name model on the hana-last-name data (having downloaded the HANA database to the folder `DATADIR` and storing the model's output in the folder `ROOT`):
+To evaluate the pre-trained hana-last-name model on the hana-last-name data navigate to the evaluate.py script (having downloaded the HANA database to the folder `DATADIR` and storing the model's output in the folder `ROOT`):
 ```
 python evaluate.py --settings hana-last-name --root ROOT --datadir DATADIR --model-from-url https://www.dropbox.com/s/vwba88pta7qc2qr/hana-last-name.pt?dl=1
 ```
