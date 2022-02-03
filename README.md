@@ -21,7 +21,7 @@ git clone https://github.com/TorbenSDJohansen/HANA.git
 
 Then prepare an environment (here using conda and the name HANA):
 ```
-conda create -n HANA numpy pandas pillow scikit-learn tensorboard
+conda create -n HANA numpy pandas pillow scikit-learn tensorboard setuptools=58
 conda activate HANA
 conda install pytorch=1.9 torchvision=0.10 torchaudio cudatoolkit=10.2 -c pytorch
 ```
