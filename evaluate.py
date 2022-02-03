@@ -35,8 +35,8 @@ def evaluate(
         fn_preds: str = None,
         ):
     """
-    Perform evaluation by calculating accuracy on the validation data. Also
-    produces predictions on the validation data.
+    Perform evaluation by calculating accuracy on the test data. Also produces
+    predictions on the test data.
 
     Parameters
     ----------
@@ -84,7 +84,7 @@ def evaluate(
 
     dataset = DataLoader(generator, data_info['batch_size'], shuffle=False, num_workers=8)
 
-    print('Predicting on validation data!')
+    print('Predicting on test data!')
     preds, seq_prob, files, labels = predict_sequence(
         models=models,
         dataset=dataset,
@@ -102,7 +102,7 @@ def evaluate(
     results = {
         'Models used': list(models.keys()),
         'Number of observations for testing': len(generator),
-        'Accuracy': acc,
+        'Full sequence accuracy': acc,
         }
     pickle.dump(results, open(fn_results, 'wb'))
     print(results)

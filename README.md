@@ -63,7 +63,7 @@ To evaluate the pre-trained hana-last-name model on the hana-last-name data (hav
 ```
 python evaluate.py --settings hana-last-name --root ROOT --datadir DATADIR --model-from-url https://www.dropbox.com/s/vwba88pta7qc2qr/hana-last-name.pt?dl=1
 ```
-This will write two files to `ROOT`:
+This will print the full sequence accuracy and write two files to `ROOT`:
 1. `eval_results.pkl`: Contains accuracy and number of test observations.
 2. `preds.csv`: Four-column data frame with (filename, labels, predictions, probability) as columns.
 
@@ -71,7 +71,7 @@ To further use matching:
 ```
 python matching.py --root ROOT --fn-lex-last DATADIR/labels/lexicon/last_names.csv
 ```
-This will write two files to `ROOT`:
+This will print the full sequence accuracy (also with matching) and write two files to `ROOT`:
 1. `eval_results_matched.pkl`: Extends `eval_results.pkl` to include accuracy with matching and number of matches made.
 2. `preds_matched.csv`: Extends `preds.csv` to include a column of predictions using matching.
 

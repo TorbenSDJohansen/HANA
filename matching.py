@@ -51,7 +51,7 @@ class MatchToStr():
         self.ignore = ignore
         self.fuzzy_map = dict()
 
-    def match(self, strs_to_match: np.ndarray) -> (np.ndarray, int, int, dict):
+    def match(self, strs_to_match: np.ndarray, verbose: bool = True) -> (np.ndarray, int, int, dict):
         """
         Matches strings to a set of valid strings - such as names.
 
@@ -62,6 +62,8 @@ class MatchToStr():
         ----------
         strs_to_match : np.ndarray
             The strings to match agains `self.potential_strs`.
+        verbose : bool
+            Whether to print progress.
 
         Returns
         -------
@@ -86,7 +88,7 @@ class MatchToStr():
         start_time = time.time()
 
         for i, str_to_match in enumerate(strs_to_match):
-            if (i + 1) % 1000 == 0:
+            if (i + 1) % 1000 == 0 and verbose:
                 running_time = time.time() - start_time
                 print(f'Progress: {round(i / nb_to_match * 100, 1)}%. ' +
                       f'Run time: {round(running_time, 1)} seconds. ' +
@@ -153,7 +155,8 @@ def match(names: np.ndarray, lookup: dict):
 
     for i, matcher in mapper.items():
         print(f'Matching column {i + 1} of {nb_cols}.')
-        matched, _, nb_fuzzy_i, _ = matcher.match(names[:, i])
+        verbose = len(matcher.potential_strs) > 1
+        matched, _, nb_fuzzy_i, _ = matcher.match(names[:, i], verbose)
         names_matched[:, i] = matched
         nb_fuzzy[i] = nb_fuzzy_i
 
@@ -237,7 +240,7 @@ def main():
     acc = (preds['pred_m'] == preds['label']).mean()
 
     results.update(nb_matches)
-    results['Accuracy (with matching)'] = acc
+    results['Full sequence accuracy (with matching)'] = acc
     print(results)
 
     pickle.dump(results, open(fn_results.replace('.pkl', '_matched.pkl'), 'wb'))
