@@ -224,7 +224,7 @@ python get_accuracies.py --fn-preds ROOT/preds_matched.csv
 
 </details>
 
-### Training
+### Training and transfer learning
 To train the model on the hana-last-name data (having downloaded the HANA database to the folder `DATADIR` and storing the model and logs in the folder `ROOT`):
 ```
 python train.py --settings ln --root ROOT --datadir DATADIR
