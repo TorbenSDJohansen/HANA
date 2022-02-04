@@ -227,7 +227,7 @@ python get_accuracies.py --fn-preds ROOT/preds_matched.csv
 ### Training and transfer learning
 To train the model on the hana-last-name data (having downloaded the HANA database to the folder `DATADIR` and storing the model and logs in the folder `ROOT`):
 ```
-python train.py --settings ln --root ROOT --datadir DATADIR
+python train.py --settings hana-last-name --root ROOT --datadir DATADIR
 ```
 This will train a neural network in `ROOT/logs/resnet50-multi-branch/` and log to tensorboard.
 Five percent of the training data will be used for the purpose of logging validation performance.
@@ -252,7 +252,7 @@ hana-full-name model
 </summary>
 
 ```
-python train.py --settings full-name --root ROOT --datadir DATADIR
+python train.py --settings hana-full-name --root ROOT --datadir DATADIR
 ```
 
 </details>
