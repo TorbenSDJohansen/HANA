@@ -67,6 +67,14 @@ DATA_DEFAULT_INFO_US_CENSUS_LARGE = {
     'height': 95,
     'width': 350,
     }
+DATA_DEFAUL_INFO_APPEN = {
+    **_DATA_DEFAULT_INFO,
+    'cells': [('validation', 'minipics')],
+    'root_labels': '{}/labels/{}/',
+    'root_images': '{}/',
+    'height': 40,
+    'width': 388,
+    }
 
 SETTINGS = {
     # SETTINGS FOR NETWORKS ON HANA DATABASE
@@ -219,6 +227,35 @@ SETTINGS = {
                 **MODEL_DEFAULT_INFO,
                 'output_sizes': [MISSING_INDICATOR + 1] * MAX_INDIVIDUAL_NAME_LEN,
                 'learning_rate': 0.01,
+                },
+            },
+        },
+    # Appen
+    'appen-last-name': {
+        'data_info': {
+            **DATA_DEFAUL_INFO_APPEN,
+            'transform_label': transform_label_last_name,
+            'clean_pred': clean_pred_last_name,
+            },
+        'model_info': {
+            'resnet50-multi-branch': {
+                **MODEL_DEFAULT_INFO,
+                'output_sizes': [MISSING_INDICATOR + 1] * MAX_INDIVIDUAL_NAME_LEN,
+                # 'learning_rate': 0.01, # FIXME
+                },
+            },
+        },
+    'appen-last-name-tl': {
+        'data_info': {
+            **DATA_DEFAUL_INFO_APPEN,
+            'transform_label': transform_label_last_name,
+            'clean_pred': clean_pred_last_name,
+            },
+        'model_info': {
+            'resnet50-multi-branch': {
+                **MODEL_DEFAULT_INFO,
+                'output_sizes': [MISSING_INDICATOR + 1] * MAX_INDIVIDUAL_NAME_LEN,
+                # 'learning_rate': 0.01, # FIXME
                 },
             },
         },
