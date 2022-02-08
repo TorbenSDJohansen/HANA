@@ -40,9 +40,7 @@ def _transform_label_individual_name(raw_input: str) -> np.ndarray:
 
     name_len = len(raw_input)
 
-    # assert MAX_INDIVIDUAL_NAME_LEN >= name_len
-    if  MAX_INDIVIDUAL_NAME_LEN < name_len:
-        return None
+    assert MAX_INDIVIDUAL_NAME_LEN >= name_len
 
     label = []
 

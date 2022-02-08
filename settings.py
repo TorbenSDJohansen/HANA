@@ -69,7 +69,7 @@ DATA_DEFAULT_INFO_US_CENSUS_LARGE = {
     }
 DATA_DEFAUL_INFO_APPEN = {
     **_DATA_DEFAULT_INFO,
-    'cells': [('validation', 'minipics')],
+    'cells': [('appen', 'minipics')],
     'root_labels': '{}/labels/{}/',
     'root_images': '{}/',
     'height': 40,
@@ -241,7 +241,7 @@ SETTINGS = {
             'resnet50-multi-branch': {
                 **MODEL_DEFAULT_INFO,
                 'output_sizes': [MISSING_INDICATOR + 1] * MAX_INDIVIDUAL_NAME_LEN,
-                # 'learning_rate': 0.01, # FIXME
+                'learning_rate': 0.2,
                 },
             },
         },
@@ -255,7 +255,7 @@ SETTINGS = {
             'resnet50-multi-branch': {
                 **MODEL_DEFAULT_INFO,
                 'output_sizes': [MISSING_INDICATOR + 1] * MAX_INDIVIDUAL_NAME_LEN,
-                # 'learning_rate': 0.01, # FIXME
+                'learning_rate': 0.01,
                 },
             },
         },
