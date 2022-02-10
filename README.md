@@ -357,7 +357,7 @@ python train.py --settings US-census-small-last-name-tl --root ROOT --datadir DA
 
 ## License
 
-Our code is licensed under Apache 2.0 (see [LICENSE](LICENSE)).
+Our code is licensed under MIT (see [LICENSE](LICENSE)).
 Part of the code used originates from two other libraries.
 To make explicit what originates from elsewhere, those parts are located in their own directories (in a modified form and only the part used in this project).
 In those directories, the license under which the library is licensed is included.
