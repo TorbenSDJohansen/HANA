@@ -11,7 +11,7 @@ This repository contains the code related to the paper [HANA: A HAndwritten NAme
 
 ### HANA database
 The HANA database can be downloaded from [Kaggle](https://www.kaggle.com/sdusimonwittrock/hana-database).
-The images are from the police register sheets from Copenhagen which cover all adults (above the age of 10) residing in the capital of Denmark, Copenhagen, in the period from 1890 to 1923
+The images are from the police register sheets from Copenhagen which cover all adults (above the age of 10) residing in the capital of Denmark, Copenhagen, in the period from 1890 to 1923.
 The labels are names written in lower case letters and contain only characters which are used in Danish words, which implies 29 alphabetic characters, i.e. this database includes the letters æ, ø, and å.
 
 ### Other databases
