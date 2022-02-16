@@ -6,7 +6,6 @@ This repository contains the code related to the paper [HANA: A HAndwritten NAme
 - [Replicate Results](#replicate-results)
 - [License](#license)
 - [Citing](#citing)
-- [TODO](#todo)
 
 ## Download Database
 
@@ -396,18 +395,3 @@ If you would like to cite our work, please use:
   journal = {XXX},
 }
 ```
-
-## TODO
-- [x] How to download database
-- [x] How to prepare environment, including which packages are needed
-- [x] Resuming training
-- [x] Transfer learning
-- [x] Is recall the right word to use? In paper and in code
-- [x] Link to paper
-- [x] Generalize matching to be able to use different lexicons etc. Rewrite README on matching
-- [x] License: Specifically for RA and ResNet, where code taken elsewhere. Method: Subfolder for each file, add license to that folder (i.e. folder will contain a license and one .py file). Fix imports. Then, in README.md, refer (for each) to 1) folder and 2) repo.
-- [x] Reformat US census labels to remove spaces
-- [x] Make sure lexicons up to date
-- [x] Where to share model weights? Test if possible to use Dropbox
-- [x] Model Zoo section?
-- [ ] Accuracy for model zoo
