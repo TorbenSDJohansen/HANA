@@ -17,8 +17,8 @@ The labels are names written in lower case letters and contain only characters w
 ### Other databases
 Aside from the HANA database, Danish and US census data is used to conduct two of our transfer learning illustrations.
 Both of these come in a small and large version.
-The small sample Danish census data can be downloaded from [Kaggle](https://www.kaggle.com/sdusimonwittrock/danish-census-small).
-The large sample Danish census data can be downloaded from [Kaggle](https://www.kaggle.com/sdusimonwittrock/danish-census-large).
+The small sample Danish census data can be downloaded from [Kaggle](https://www.kaggle.com/sdusimonwittrock/danish-census-handwritten-names-small).
+The large sample Danish census data can be downloaded from [Kaggle](https://www.kaggle.com/sdusimonwittrock/danish-census-handwritten-names-large).
 The US census data we use is not publicly available currently.
 
 ## Clone Repository and Prepare Environment
