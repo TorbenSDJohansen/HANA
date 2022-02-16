@@ -9,7 +9,17 @@ This repository contains the code related to the paper [HANA: A HAndwritten NAme
 
 ## Download Database
 
-The database can be downloaded from [Kaggle](https://www.kaggle.com/sdusimonwittrock/hana-database).
+### HANA database
+The HANA database can be downloaded from [Kaggle](https://www.kaggle.com/sdusimonwittrock/hana-database).
+The images are from the police register sheets from Copenhagen which cover all adults (above the age of 10) residing in the capital of Denmark, Copenhagen, in the period from 1890 to 1923
+The labels are names written in lower case letters and contain only characters which are used in Danish words, which implies 29 alphabetic characters, i.e. this database includes the letters æ, ø, and å.
+
+### Other databases
+Aside from the HANA database, Danish and US census data is used to conduct two of our transfer learning illustrations.
+Both of these come in a small and large version.
+The small sample Danish census data can be downloaded from [Kaggle](https://www.kaggle.com/sdusimonwittrock/danish-census-small).
+The large sample Danish census data can be downloaded from [Kaggle](https://www.kaggle.com/sdusimonwittrock/danish-census-large).
+The US census data we use is not publicly available currently.
 
 ## Clone Repository and Prepare Environment
 
@@ -26,6 +36,7 @@ conda install pytorch=1.9 torchvision=0.10 torchaudio cudatoolkit=10.2 -c pytorc
 ```
 
 ### Model Zoo
+Our trained models are available for download:
 
 <details>
 
@@ -77,6 +88,8 @@ To replicate our results, follow the steps in the following sections.
 Note the following abbreviations used:
 1. `DATADIR`: This is the directory where you store the data (images, labels, lexicons). This varies between datasets, i.e. the `DATADIR` for the HANA database is different from the one for the Danish census, which itself comes in both a small and a large version.
 2. `ROOT`: This is the directory where you store a model and its output (such as predictions). Each neural network should have its own `ROOT`.
+
+While the US census data we use is not publicly available, the commands we use are still available: [README_us_census.md](README_us_census.md).
 
 ### Evaluation
 
@@ -188,62 +201,7 @@ python get_accuracies.py --fn-preds ROOT/preds_matched.csv
 
 </details>
 
-#### US census
-<details>
 
-<summary>
-(large subset) us-census model on us-census-last-name
-</summary>
-
-```
-python evaluate.py --settings US-census-large-last-name --root ROOT --datadir DATADIR --model-from-url https://www.dropbox.com/s/t5bvr6oh27p4wcs/us-census-large-last-name.pt?dl=1
-python matching.py --root ROOT --fn-lex-last DATADIR/labels/lexicon/last_names.csv
-python get_accuracies.py --fn-preds ROOT/preds_matched.csv
-```
-
-</details>
-
-<details>
-
-<summary>
-(large subset) us-census model w/ TL on us-census-last-name
-</summary>
-
-```
-python evaluate.py --settings US-census-large-last-name-tl --root ROOT --datadir DATADIR --model-from-url https://www.dropbox.com/s/mb73ce9wgqf4er6/us-census-large-last-name-tl.pt?dl=1
-python matching.py --root ROOT --fn-lex-last DATADIR/labels/lexicon/last_names.csv
-python get_accuracies.py --fn-preds ROOT/preds_matched.csv
-```
-
-</details>
-
-<details>
-
-<summary>
-(small subset) us-census model on us-census-last-name
-</summary>
-
-```
-python evaluate.py --settings US-census-small-last-name --root ROOT --datadir DATADIR --model-from-url https://www.dropbox.com/s/2u4nfrkb0wof017/us-census-small-last-name.pt?dl=1
-python matching.py --root ROOT --fn-lex-last DATADIR/labels/lexicon/last_names.csv
-python get_accuracies.py --fn-preds ROOT/preds_matched.csv
-```
-
-</details>
-
-<details>
-
-<summary>
-(small subset) us-census model w/ TL on us-census-last-name
-</summary>
-
-```
-python evaluate.py --settings US-census-small-last-name-tl --root ROOT --datadir DATADIR --model-from-url https://www.dropbox.com/s/nvtmvih13ttac9a/us-census-small-last-name-tl.pt?dl=1
-python matching.py --root ROOT --fn-lex-last DATADIR/labels/lexicon/last_names.csv
-python get_accuracies.py --fn-preds ROOT/preds_matched.csv
-```
-
-</details>
 
 ### Training and transfer learning
 To train the model on the hana-last-name data (having downloaded the HANA database to the folder `DATADIR` and storing the model and logs in the folder `ROOT`):
@@ -323,55 +281,6 @@ python train.py --settings danish-census-small-last-name --root ROOT --datadir D
 
 ```
 python train.py --settings danish-census-small-last-name-tl --root ROOT --datadir DATADIR --url-pretrained https://www.dropbox.com/s/vwba88pta7qc2qr/hana-last-name.pt?dl=1
-```
-
-</details>
-
-#### US census
-<details>
-
-<summary>
-(large subset) us-census model on us-census-last-name
-</summary>
-
-```
-python train.py --settings US-census-large-last-name --root ROOT --datadir DATADIR
-```
-
-</details>
-
-<details>
-
-<summary>
-(large subset) us-census model on us-census-last-name w/ TL
-</summary>
-
-```
-python train.py --settings US-census-large-last-name-tl --root ROOT --datadir DATADIR --url-pretrained https://www.dropbox.com/s/vwba88pta7qc2qr/hana-last-name.pt?dl=1
-```
-
-</details>
-
-<details>
-
-<summary>
-(small subset) us-census model on us-census-last-name
-</summary>
-
-```
-python train.py --settings US-census-small-last-name --root ROOT --datadir DATADIR
-```
-
-</details>
-
-<details>
-
-<summary>
-(small subset) us-census model on us-census-last-name w/ TL
-</summary>
-
-```
-python train.py --settings US-census-small-last-name-tl --root ROOT --datadir DATADIR --url-pretrained https://www.dropbox.com/s/vwba88pta7qc2qr/hana-last-name.pt?dl=1
 ```
 
 </details>
