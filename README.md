@@ -52,7 +52,7 @@ Table with Danish census models and URLs
 | ---                       | ---   | --- |
 | danish-census-large       | 86.1  | [model](https://www.dropbox.com/s/bcobjqiolvcdte6/danish-census-large-last-name.pt?dl=1)    |
 | danish-census-large-tl    | 94.6  | [model](https://www.dropbox.com/s/rbd6ibyrnjqycgs/danish-census-large-last-name-tl.pt?dl=1) |
-| danish-census-small       | 77.9  | [model](https://www.dropbox.com/s/i2jjk905vrcc4op/danish-census-small-last-name.pt?dl=1)    |
+| danish-census-small       | 77.8  | [model](https://www.dropbox.com/s/i2jjk905vrcc4op/danish-census-small-last-name.pt?dl=1)    |
 | danish-census-small-tl    | 92.2  | [model](https://www.dropbox.com/s/2v8g1lb0rhrjx6z/danish-census-small-last-name-tl.pt?dl=1) |
 
 </details>
