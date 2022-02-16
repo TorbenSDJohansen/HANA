@@ -31,22 +31,44 @@ conda install pytorch=1.9 torchvision=0.10 torchaudio cudatoolkit=10.2 -c pytorc
 <details>
 
 <summary>
-Table with model URLs
+Table with HANA models and URLs
 </summary>
 
-| name                      | acc@hana-last-name    | acc@hana-first-and-last-name  | acc@hana-full-name    | acc@danish-census-last-name   | acc@us-census-last-name   | url |
-| ---                       | ---                   | ---                           | ---                   | ---                           | ---                       | --- |
-| hana-last-name            | XXX                   | XXX                           | XXX                   | XXX                           | XXX                       | [model](https://www.dropbox.com/s/vwba88pta7qc2qr/hana-last-name.pt?dl=1) |
-| hana-first-and-last-name  | XXX                   | XXX                           | XXX                   | XXX                           | XXX                       | [model](https://www.dropbox.com/s/1zbfd7l3bkdg662/hana-first-and-last-name.pt?dl=1) |
-| hana-full-name            | XXX                   | XXX                           | XXX                   | XXX                           | XXX                       | [model](https://www.dropbox.com/s/jj32kp5sy6bdmoh/hana-full-name.pt?dl=1) |
-| danish-census-large       | XXX                   | XXX                           | XXX                   | XXX                           | XXX                       | [model](https://www.dropbox.com/s/bcobjqiolvcdte6/danish-census-large-last-name.pt?dl=1) |
-| danish-census-large-tl    | XXX                   | XXX                           | XXX                   | XXX                           | XXX                       | [model](https://www.dropbox.com/s/rbd6ibyrnjqycgs/danish-census-large-last-name-tl.pt?dl=1) |
-| danish-census-small       | XXX                   | XXX                           | XXX                   | XXX                           | XXX                       | [model](https://www.dropbox.com/s/i2jjk905vrcc4op/danish-census-small-last-name.pt?dl=1) |
-| danish-census-small-tl    | XXX                   | XXX                           | XXX                   | XXX                           | XXX                       | [model](https://www.dropbox.com/s/2v8g1lb0rhrjx6z/danish-census-small-last-name-tl.pt?dl=1) |
-| us-census-large           | XXX                   | XXX                           | XXX                   | XXX                           | XXX                       | [model](https://www.dropbox.com/s/t5bvr6oh27p4wcs/us-census-large-last-name.pt?dl=1) |
-| us-census-large-tl        | XXX                   | XXX                           | XXX                   | XXX                           | XXX                       | [model](https://www.dropbox.com/s/mb73ce9wgqf4er6/us-census-large-last-name-tl.pt?dl=1) |
-| us-census-small           | XXX                   | XXX                           | XXX                   | XXX                           | XXX                       | [model](https://www.dropbox.com/s/2u4nfrkb0wof017/us-census-small-last-name.pt?dl=1) |
-| us-census-small-tl        | XXX                   | XXX                           | XXX                   | XXX                           | XXX                       | [model](https://www.dropbox.com/s/nvtmvih13ttac9a/us-census-small-last-name-tl.pt?dl=1) |
+| name                      | WACC  | WACC w/ matching  | url |
+| ---                       | ---   | ---               | --- |
+| hana-last-name            | 94.3  | 95.7              | [model](https://www.dropbox.com/s/vwba88pta7qc2qr/hana-last-name.pt?dl=1)           |
+| hana-first-and-last-name  | 93.5  | 94.8              | [model](https://www.dropbox.com/s/1zbfd7l3bkdg662/hana-first-and-last-name.pt?dl=1) |
+| hana-full-name            | 67.4  | 68.8              | [model](https://www.dropbox.com/s/jj32kp5sy6bdmoh/hana-full-name.pt?dl=1)           |
+
+</details>
+
+<details>
+
+<summary>
+Table with Danish census models and URLs
+</summary>
+
+| name                      | WACC  | url |
+| ---                       | ---   | --- |
+| danish-census-large       | XXX   | [model](https://www.dropbox.com/s/bcobjqiolvcdte6/danish-census-large-last-name.pt?dl=1)    |
+| danish-census-large-tl    | XXX   | [model](https://www.dropbox.com/s/rbd6ibyrnjqycgs/danish-census-large-last-name-tl.pt?dl=1) |
+| danish-census-small       | XXX   | [model](https://www.dropbox.com/s/i2jjk905vrcc4op/danish-census-small-last-name.pt?dl=1)    |
+| danish-census-small-tl    | XXX   | [model](https://www.dropbox.com/s/2v8g1lb0rhrjx6z/danish-census-small-last-name-tl.pt?dl=1) |
+
+</details>
+
+<details>
+
+<summary>
+Table with US census models and URLs
+</summary>
+
+| name                      | WACC  | url |
+| ---                       | ---   | --- |
+| us-census-large           | 72.8  | [model](https://www.dropbox.com/s/t5bvr6oh27p4wcs/us-census-large-last-name.pt?dl=1)    |
+| us-census-large-tl        | 78.7  | [model](https://www.dropbox.com/s/mb73ce9wgqf4er6/us-census-large-last-name-tl.pt?dl=1) |
+| us-census-small           | 84.7  | [model](https://www.dropbox.com/s/2u4nfrkb0wof017/us-census-small-last-name.pt?dl=1)    |
+| us-census-small-tl        | 86.8  | [model](https://www.dropbox.com/s/nvtmvih13ttac9a/us-census-small-last-name-tl.pt?dl=1) |
 
 </details>
 
