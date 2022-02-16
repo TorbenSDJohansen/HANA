@@ -50,10 +50,10 @@ Table with Danish census models and URLs
 
 | name                      | WACC  | url |
 | ---                       | ---   | --- |
-| danish-census-large       | XXX   | [model](https://www.dropbox.com/s/bcobjqiolvcdte6/danish-census-large-last-name.pt?dl=1)    |
-| danish-census-large-tl    | XXX   | [model](https://www.dropbox.com/s/rbd6ibyrnjqycgs/danish-census-large-last-name-tl.pt?dl=1) |
-| danish-census-small       | XXX   | [model](https://www.dropbox.com/s/i2jjk905vrcc4op/danish-census-small-last-name.pt?dl=1)    |
-| danish-census-small-tl    | XXX   | [model](https://www.dropbox.com/s/2v8g1lb0rhrjx6z/danish-census-small-last-name-tl.pt?dl=1) |
+| danish-census-large       | 86.1  | [model](https://www.dropbox.com/s/bcobjqiolvcdte6/danish-census-large-last-name.pt?dl=1)    |
+| danish-census-large-tl    | 94.6  | [model](https://www.dropbox.com/s/rbd6ibyrnjqycgs/danish-census-large-last-name-tl.pt?dl=1) |
+| danish-census-small       | 77.9  | [model](https://www.dropbox.com/s/i2jjk905vrcc4op/danish-census-small-last-name.pt?dl=1)    |
+| danish-census-small-tl    | 92.2  | [model](https://www.dropbox.com/s/2v8g1lb0rhrjx6z/danish-census-small-last-name-tl.pt?dl=1) |
 
 </details>
 
@@ -65,10 +65,10 @@ Table with US census models and URLs
 
 | name                      | WACC  | url |
 | ---                       | ---   | --- |
-| us-census-large           | 72.8  | [model](https://www.dropbox.com/s/t5bvr6oh27p4wcs/us-census-large-last-name.pt?dl=1)    |
-| us-census-large-tl        | 78.7  | [model](https://www.dropbox.com/s/mb73ce9wgqf4er6/us-census-large-last-name-tl.pt?dl=1) |
-| us-census-small           | 84.7  | [model](https://www.dropbox.com/s/2u4nfrkb0wof017/us-census-small-last-name.pt?dl=1)    |
-| us-census-small-tl        | 86.8  | [model](https://www.dropbox.com/s/nvtmvih13ttac9a/us-census-small-last-name-tl.pt?dl=1) |
+| us-census-large           | 84.7  | [model](https://www.dropbox.com/s/t5bvr6oh27p4wcs/us-census-large-last-name.pt?dl=1)    |
+| us-census-large-tl        | 86.8  | [model](https://www.dropbox.com/s/mb73ce9wgqf4er6/us-census-large-last-name-tl.pt?dl=1) |
+| us-census-small           | 72.8  | [model](https://www.dropbox.com/s/2u4nfrkb0wof017/us-census-small-last-name.pt?dl=1)    |
+| us-census-small-tl        | 78.7  | [model](https://www.dropbox.com/s/nvtmvih13ttac9a/us-census-small-last-name-tl.pt?dl=1) |
 
 </details>
 
