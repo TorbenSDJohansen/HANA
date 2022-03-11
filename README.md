@@ -297,10 +297,12 @@ In those directories, the license under which the library is licensed is include
 ## Citing
 If you would like to cite our work, please use:
 ```bibtex
-@article{tsdj2022hana,
-  author = {XXX},
-  title = {XXX},
-  year = {XXX},
-  journal = {XXX},
+@misc{dahl2022hana,
+      title={HANA: A HAndwritten NAme Database for Offline Handwritten Text Recognition}, 
+      author={Christian M. Dahl and Torben Johansen and Emil N. Sørensen and Simon Wittrock},
+      year={2022},
+      eprint={2101.10862},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
 }
 ```
