@@ -1,5 +1,5 @@
 # HANA
-This repository contains the code related to the paper [HANA: A HAndwritten NAme Database for Offline Handwritten Text Recognition](https://arxiv.org/abs/2101.10862) by Christian M. Dahl, Torben Johansen, Emil N. Sørensen, and Simon Wittrock.
+This repository contains the code related to the paper [HANA: A HAndwritten NAme Database for Offline Handwritten Text Recognition](https://www.sciencedirect.com/science/article/pii/S0014498322000511) by Christian M. Dahl, Torben Johansen, Emil N. Sørensen, and Simon Wittrock (earlier [arXiv version](https://arxiv.org/abs/2101.10862)).
 
 - [Download Database](#download-database)
 - [Clone Repository and Prepare Environment](#clone-repository-and-prepare-environment)
@@ -295,7 +295,22 @@ In those directories, the license under which the library is licensed is include
 1. **ResNet**: Originates from [torchvision](https://github.com/pytorch/vision) and located in [networks/util/torchvision](networks/util/torchvision).
 
 ## Citing
-If you would like to cite our work, please use:
+If you would like to cite our work, please use
+```bibtex
+@article{dahl2023hana,
+    author = {Dahl, Christian M. and Johansen, Torben S. D. and S{\o}rensen, Emil N. and Wittrock, Simon F.},
+    title = {HANA: A HAndwritten NAme Database for Offline Handwritten Text},
+    journal = {Explorations in Economic History},
+    volume = {87},
+    pages = {101473},
+    year = {2023},
+    note = {Methodological Advances in the Extraction and Analysis of Historical Data},
+    issn = {0014-4983},
+    doi = {https://doi.org/10.1016/j.eeh.2022.101473},
+    url = {https://www.sciencedirect.com/science/article/pii/S0014498322000511}
+}
+```
+or (as a reference to the earlier arXiv version)
 ```bibtex
 @misc{dahl2022hana,
       title={HANA: A HAndwritten NAme Database for Offline Handwritten Text Recognition}, 
